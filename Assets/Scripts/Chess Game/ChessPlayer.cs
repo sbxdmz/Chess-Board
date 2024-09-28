@@ -38,6 +38,17 @@ public class ChessPlayer
 		}
 	}
 
+	public List<Vector2Int> GetAllPossibleMoves(){
+		List<Vector2Int> Result = new List<Vector2Int>();
+		foreach (var piece in activePieces)
+		{
+			if(board.HasPiece(piece))
+				Result.AddRange(piece.avaliableMoves);
+		}
+
+		return Result;
+	} 
+
 	public Piece[] GetPieceAtackingOppositePiceOfType<T>() where T : Piece
 	{
 		return activePieces.Where(p => p.IsAttackingPieceOfType<T>()).ToArray();

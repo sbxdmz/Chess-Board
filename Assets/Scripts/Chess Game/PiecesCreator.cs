@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,4 +34,6 @@ public class PiecesCreator : MonoBehaviour
     {
         return team == TeamColor.White ? whiteMaterial : blackMaterial;
     }
+
+    
 }

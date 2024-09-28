@@ -23,6 +23,8 @@ public class ChessGameController : MonoBehaviour
 
     private GameState state;
 
+    public List<Vector2Int> test1;
+    public List<Vector2Int> test2;
     private void Awake()
     {
         SetDependencies();
@@ -124,21 +126,37 @@ public class ChessGameController : MonoBehaviour
 
     private bool CheckIfGameIsFinished()
     {
-        Piece[] kingAttackingPieces = activePlayer.GetPieceAtackingOppositePiceOfType<King>();
-        if (kingAttackingPieces.Length > 0)
-        {
-            ChessPlayer oppositePlayer = GetOpponentToPlayer(activePlayer);
-            Piece attackedKing = oppositePlayer.GetPiecesOfType<King>().FirstOrDefault();
-            oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, attackedKing);
-
-            int avaliableKingMoves = attackedKing.avaliableMoves.Count;
-            if (avaliableKingMoves == 0)
-            {
-                bool canCoverKing = oppositePlayer.CanHidePieceFromAttack<King>(activePlayer);
-                if (!canCoverKing)
-                    return true;
-            }
+        ChessPlayer oppositePlayer = GetOpponentToPlayer(activePlayer);
+        foreach (var piece in oppositePlayer.activePieces){
+            oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, piece);
         }
+        Piece[] kingAttackingPieces = activePlayer.GetPieceAtackingOppositePiceOfType<King>();
+        
+            
+        Piece attackedKing = oppositePlayer.GetPiecesOfType<King>().FirstOrDefault();
+        oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, attackedKing);
+        test1 = new List<Vector2Int>();
+        test2 = new List<Vector2Int>();
+        if (oppositePlayer.team == TeamColor.White){
+            test1 = oppositePlayer.GetAllPossibleMoves();
+        }
+        else{
+            test2 = oppositePlayer.GetAllPossibleMoves();
+        }
+        
+        int avaliableKingMoves = attackedKing.avaliableMoves.Count;
+        if (avaliableKingMoves == 0)
+        {
+            bool canCoverKing = oppositePlayer.CanHidePieceFromAttack<King>(activePlayer);
+            if (!canCoverKing){
+                if (kingAttackingPieces.Length == 0){
+                    Debug.Log("Stalemate");
+                }
+                return true;
+            }
+
+        }
+
         return false;
     }
 
