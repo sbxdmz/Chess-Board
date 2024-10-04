@@ -34,6 +34,7 @@ public class Queen : Piece
                 {
                     TryToAddMove(nextCoords);
                     break;
+
                 }
                 else if (piece.IsFromSameTeam(this))
                     break;

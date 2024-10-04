@@ -19,4 +19,9 @@ public class ChessUIManager : MonoBehaviour
 		UIParent.SetActive(true);
 		finishText.text = string.Format("{0} won", winner);
 	}
+	internal void OnGameStalemate()
+	{
+		UIParent.SetActive(true);
+		finishText.text = "Stalemate";
+	}
 }

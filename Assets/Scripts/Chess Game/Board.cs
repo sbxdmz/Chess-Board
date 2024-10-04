@@ -84,7 +84,18 @@ public class Board : MonoBehaviour
         for (int i = 0; i < selection.Count; i++)
         {
             Vector3 position = CalculatePositionFromCoords(selection[i]);
-            bool isSquareFree = GetPieceOnSquare(selection[i]) == null;
+            Piece piece = GetPieceOnSquare(selection[i]);
+            bool isSquareFree = true;
+            if (piece && !selectedPiece.IsFromSameTeam(piece))
+            {
+                if(piece.occupiedSquare == selection[i]){
+                    isSquareFree = false;
+                }
+                else if(selectedPiece.GetType() == typeof(Pawn)){
+                    isSquareFree = false;
+                }
+            }
+            
             squaresData.Add(position, isSquareFree);
         }
         squareSelector.ShowSelection(squaresData);
@@ -171,7 +182,12 @@ public class Board : MonoBehaviour
         Piece piece = GetPieceOnSquare(coords);
         if (piece && !selectedPiece.IsFromSameTeam(piece))
         {
-            TakePiece(piece);
+            if(piece.occupiedSquare == coords){
+                TakePiece(piece);
+            }
+            else if(selectedPiece.GetType() == typeof(Pawn)){
+                TakePiece(piece);
+            }
         }
     }
 

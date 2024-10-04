@@ -115,9 +115,12 @@ public class ChessGameController : MonoBehaviour
         GenerateAllPossiblePlayerMoves(activePlayer);
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         board.ClearBoardOfPassant(GetOpponentToPlayer(activePlayer));
-        if (CheckIfGameIsFinished())
+        if (CheckIfGameIsFinished() == ChessGameState.GameWon)
         {
             EndGame();
+        }
+        else if(CheckIfGameIsFinished() == ChessGameState.GameStalemate){
+            StalemateGame();
         }
         else
         {
@@ -125,7 +128,7 @@ public class ChessGameController : MonoBehaviour
         }
     }
 
-    private bool CheckIfGameIsFinished()
+    private ChessGameState CheckIfGameIsFinished()
     {
         ChessPlayer oppositePlayer = GetOpponentToPlayer(activePlayer);
         foreach (var piece in oppositePlayer.activePieces){
@@ -151,14 +154,14 @@ public class ChessGameController : MonoBehaviour
             bool canCoverKing = oppositePlayer.CanHidePieceFromAttack<King>(activePlayer);
             if (!canCoverKing){
                 if (kingAttackingPieces.Length == 0){
-                    Debug.Log("Stalemate");
+                   return ChessGameState.GameStalemate;
                 }
-                return true;
+                return ChessGameState.GameWon;
             }
 
         }
 
-        return false;
+        return ChessGameState.GameRunning;
     }
 
     private void EndGame()
@@ -167,6 +170,10 @@ public class ChessGameController : MonoBehaviour
         UIManager.OnGameFinished(activePlayer.team.ToString());
     }
 
+    private void StalemateGame(){
+        SetGameState(GameState.Finished);
+        UIManager.OnGameStalemate();
+    }
     public void RestartGame()
     {
         DestroyPieces();
@@ -205,3 +212,4 @@ public class ChessGameController : MonoBehaviour
     }
 }
 
+public enum ChessGameState{GameRunning, GameWon, GameStalemate}
