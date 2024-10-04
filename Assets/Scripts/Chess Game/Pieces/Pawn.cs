@@ -40,6 +40,13 @@ public class Pawn : Piece
 
     public override void MovePiece(Vector2Int coords)
     {
+        float dist = Vector2Int.Distance(occupiedSquare, coords);
+        if (!hasMoved && dist == 2)
+        {
+            Vector2Int spaceBetween = (occupiedSquare + coords) / 2;
+            board.UpdateBoardOnPieceMove(spaceBetween, spaceBetween, this, null);
+        }
+
         base.MovePiece(coords);
         CheckPromotion();
     }

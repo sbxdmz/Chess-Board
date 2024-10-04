@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 [RequireComponent(typeof(SquareSelectorCreator))]
 public class Board : MonoBehaviour
@@ -112,6 +113,24 @@ public class Board : MonoBehaviour
     {
         grid[oldCoords.x, oldCoords.y] = oldPiece;
         grid[newCoords.x, newCoords.y] = newPiece;
+    }
+
+    public void ClearBoardOfPassant(ChessPlayer player)
+    {
+        for (int row = 0; row < grid.GetLength(0); row++)
+        {
+            for (int col = 0; col < grid.GetLength(1); col++)
+            {
+                if (grid[row, col] == null) { continue; }
+                if (grid[row, col].team != player.team) { continue; }
+
+                Vector2Int pos = new Vector2Int(row, col);
+
+                if (pos == grid[row, col].occupiedSquare) { continue; }
+
+                UpdateBoardOnPieceMove(pos, pos, null, null);
+            }
+        }
     }
 
     public Piece GetPieceOnSquare(Vector2Int coords)

@@ -114,6 +114,7 @@ public class ChessGameController : MonoBehaviour
     {
         GenerateAllPossiblePlayerMoves(activePlayer);
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
+        board.ClearBoardOfPassant(GetOpponentToPlayer(activePlayer));
         if (CheckIfGameIsFinished())
         {
             EndGame();
@@ -184,6 +185,7 @@ public class ChessGameController : MonoBehaviour
     private void ChangeActiveTeam()
     {
         activePlayer = activePlayer == whitePlayer ? blackPlayer : whitePlayer;
+        
     }
 
     private ChessPlayer GetOpponentToPlayer(ChessPlayer player)
