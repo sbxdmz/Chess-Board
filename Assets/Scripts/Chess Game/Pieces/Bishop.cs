@@ -28,7 +28,9 @@ public class Bishop : Piece
                 else if (!piece.IsFromSameTeam(this))
                 {
                     TryToAddMove(nextCoords);
-                    break;
+                    if(piece.occupiedSquare == nextCoords){
+                        break;
+                    } 
                 }
                 else if (piece.IsFromSameTeam(this))
                     break;
