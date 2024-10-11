@@ -11,6 +11,8 @@ public class Board : MonoBehaviour
 
     [SerializeField] private Transform bottomLeftSquareTransform;
     [SerializeField] private float squareSize;
+    [SerializeField] private GameObject promotionScreen;
+    [SerializeField] private GameObject buttonParent;
 
     private Piece[,] grid;
     private Piece selectedPiece;
@@ -201,11 +203,32 @@ public class Board : MonoBehaviour
         }
     }
 
-
+    private string chosenPiece = "";
     public void PromotePiece(Piece piece)
-    {
-        TakePiece(piece);
-        chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Queen));
+    {   
+        
+        promotionScreen.SetActive(true);
+        buttonParent.transform.position = CalculatePositionFromCoords(piece.occupiedSquare);
+        buttonParent.GetComponent<ButtonTeam>().SwitchToTeam(piece.team);
+        StartCoroutine(waitForButtonSelect());
+        IEnumerator waitForButtonSelect(){
+            yield return new WaitUntil(()=>chosenPiece != "");
+            TakePiece(piece);
+            switch(chosenPiece){
+                case "Queen": chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Queen)); break;
+                case "Knight":chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Knight)); break;
+                case "Rook":chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Rook)); break;
+                case "Bishop":chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Bishop)); break;
+            }   
+            chosenPiece = "";
+            promotionScreen.SetActive(false);
+        } 
+        
+        
+    }
+
+    public void ChoosePromotionPiece(String pieceType){
+        chosenPiece = pieceType;
     }
 
     internal void OnGameRestarted()
