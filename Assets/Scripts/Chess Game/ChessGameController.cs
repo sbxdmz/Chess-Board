@@ -131,14 +131,21 @@ public class ChessGameController : MonoBehaviour
     private ChessGameState CheckIfGameIsFinished()
     {
         ChessPlayer oppositePlayer = GetOpponentToPlayer(activePlayer);
+        bool isInCheck = false;
         foreach (var piece in oppositePlayer.activePieces){
-            oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, piece);
+            bool foundAttack = oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, piece);
+            if(foundAttack == true){
+                isInCheck = true;
+            }
         }
         Piece[] kingAttackingPieces = activePlayer.GetPieceAtackingOppositePiceOfType<King>();
         
             
         Piece attackedKing = oppositePlayer.GetPiecesOfType<King>().FirstOrDefault();
         oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, attackedKing);
+        if(isInCheck){
+            Debug.Log("check");
+        }
         test1 = new List<Vector2Int>();
         test2 = new List<Vector2Int>();
         if (oppositePlayer.team == TeamColor.White){

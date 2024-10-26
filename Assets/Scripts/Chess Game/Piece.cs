@@ -51,12 +51,14 @@ public abstract class Piece : MonoBehaviour
 		return avaliableMoves.Contains(coords);
 	}
 
-	public virtual void MovePiece(Vector2Int coords)
+	public virtual moveType MovePiece(Vector2Int coords)
 	{
 		Vector3 targetPosition = board.CalculatePositionFromCoords(coords);
 		occupiedSquare = coords;
 		hasMoved = true;
 		tweener.MoveTo(transform, targetPosition);
+
+		return moveType.normal;
 	}
 
 
@@ -83,4 +85,7 @@ public abstract class Piece : MonoBehaviour
 		return false;
 	}
 
+}
+public enum moveType{
+	normal, shortCastle, longCastle
 }

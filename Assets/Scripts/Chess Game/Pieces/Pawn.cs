@@ -38,7 +38,7 @@ public class Pawn : Piece
         return avaliableMoves;
     }
 
-    public override void MovePiece(Vector2Int coords)
+    public override moveType MovePiece(Vector2Int coords)
     {
         float dist = Vector2Int.Distance(occupiedSquare, coords);
         if (!hasMoved && dist == 2)
@@ -49,6 +49,7 @@ public class Pawn : Piece
 
         base.MovePiece(coords);
         CheckPromotion();
+        return moveType.normal;
     }
 
     private void CheckPromotion()

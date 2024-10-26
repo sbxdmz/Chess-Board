@@ -110,9 +110,15 @@ public class Board : MonoBehaviour
     }
     private void OnSelectedPieceMoved(Vector2Int coords, Piece piece)
     {
-        TryToTakeOppositePiece(coords);
+        Debug.Log(piece.occupiedSquare);
+        bool tookPiece = TryToTakeOppositePiece(coords);
+        Debug.Log(piece.GetType().ToString() + "" + coords);
+        if(tookPiece){
+            Debug.Log("Took piece");
+        }
         UpdateBoardOnPieceMove(coords, piece.occupiedSquare, piece, null);
-        selectedPiece.MovePiece(coords);
+        moveType MT = selectedPiece.MovePiece(coords);
+        Debug.Log(MT);
         DeselectPiece();
         EndTurn();
     }
@@ -179,18 +185,21 @@ public class Board : MonoBehaviour
             grid[coords.x, coords.y] = piece;
     }
 
-    private void TryToTakeOppositePiece(Vector2Int coords)
+    private bool TryToTakeOppositePiece(Vector2Int coords)
     {
         Piece piece = GetPieceOnSquare(coords);
         if (piece && !selectedPiece.IsFromSameTeam(piece))
         {
             if(piece.occupiedSquare == coords){
                 TakePiece(piece);
+                return true;
             }
             else if(selectedPiece.GetType() == typeof(Pawn)){
                 TakePiece(piece);
+                return true;
             }
         }
+        return false;
     }
 
     private void TakePiece(Piece piece)

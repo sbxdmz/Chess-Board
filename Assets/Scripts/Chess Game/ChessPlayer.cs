@@ -59,7 +59,7 @@ public class ChessPlayer
 		return activePieces.Where(p => p is T).ToArray();
 	}
 
-	public void RemoveMovesEnablingAttakOnPieceOfType<T>(ChessPlayer opponent, Piece selectedPiece) where T : Piece
+	public bool RemoveMovesEnablingAttakOnPieceOfType<T>(ChessPlayer opponent, Piece selectedPiece) where T : Piece
 	{
 		List<Vector2Int> coordsToRemove = new List<Vector2Int>();
 
@@ -77,6 +77,11 @@ public class ChessPlayer
 		{
 			selectedPiece.avaliableMoves.Remove(coords);
 		}
+		// Debug.Log("Coords to remove" + coordsToRemove.Count);
+		if(coordsToRemove.Count > 0){
+			return true;
+		} 
+		return false;
 
 	}
 
