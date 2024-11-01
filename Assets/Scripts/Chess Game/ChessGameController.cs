@@ -142,7 +142,7 @@ public class ChessGameController : MonoBehaviour
         
             
         Piece attackedKing = oppositePlayer.GetPiecesOfType<King>().FirstOrDefault();
-        oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, attackedKing);
+        //oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, attackedKing);
         if(isInCheck){
             Debug.Log("check");
         }
