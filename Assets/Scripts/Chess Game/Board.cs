@@ -18,7 +18,7 @@ public class Board : MonoBehaviour
     private Piece selectedPiece;
     private ChessGameController chessController;
     private SquareSelectorCreator squareSelector;
-
+    private ChessHistoryManager historyManager;
 
     private void Awake()
     {
@@ -26,9 +26,10 @@ public class Board : MonoBehaviour
         CreateGrid();
     }
 
-    public void SetDependencies(ChessGameController chessController)
+    public void SetDependencies(ChessGameController chessController, ChessHistoryManager historyManager)
     {
         this.chessController = chessController;
+        this.historyManager = historyManager;
     }
 
 
@@ -110,15 +111,12 @@ public class Board : MonoBehaviour
     }
     private void OnSelectedPieceMoved(Vector2Int coords, Piece piece)
     {
-        Debug.Log(piece.occupiedSquare);
-        bool tookPiece = TryToTakeOppositePiece(coords);
-        Debug.Log(piece.GetType().ToString() + "" + coords);
-        if(tookPiece){
-            Debug.Log("Took piece");
-        }
+        Vector2Int origin = piece.occupiedSquare;
+        Piece takenPiece = TryToTakeOppositePiece(coords);
+        Piece movingPiece = piece;
         UpdateBoardOnPieceMove(coords, piece.occupiedSquare, piece, null);
         moveType MT = selectedPiece.MovePiece(coords);
-        Debug.Log(MT);
+        historyManager.RecordMove(origin, coords, MT, takenPiece, movingPiece);
         DeselectPiece();
         EndTurn();
     }
@@ -185,21 +183,21 @@ public class Board : MonoBehaviour
             grid[coords.x, coords.y] = piece;
     }
 
-    private bool TryToTakeOppositePiece(Vector2Int coords)
+    private Piece TryToTakeOppositePiece(Vector2Int coords)
     {
         Piece piece = GetPieceOnSquare(coords);
         if (piece && !selectedPiece.IsFromSameTeam(piece))
         {
             if(piece.occupiedSquare == coords){
                 TakePiece(piece);
-                return true;
+                return piece;
             }
             else if(selectedPiece.GetType() == typeof(Pawn)){
                 TakePiece(piece);
-                return true;
+                return piece;
             }
         }
-        return false;
+        return null;
     }
 
     private void TakePiece(Piece piece)

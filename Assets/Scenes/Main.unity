@@ -1902,6 +1902,7 @@ GameObject:
   - component: {fileID: 1909074937}
   - component: {fileID: 1909074935}
   - component: {fileID: 1909074936}
+  - component: {fileID: 1909074938}
   m_Layer: 0
   m_Name: GameMaster
   m_TagString: Untagged
@@ -1925,6 +1926,7 @@ MonoBehaviour:
     type: 2}
   board: {fileID: 5265858340144138424}
   UIManager: {fileID: 1263572175}
+  historyManager: {fileID: 1909074938}
   test1: []
   test2: []
 --- !u!114 &1909074936
@@ -1963,6 +1965,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1909074938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909074934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea1d25f9112ff2948b7c575454ebffea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveHistory: []
 --- !u!1 &1933272501
 GameObject:
   m_ObjectHideFlags: 0

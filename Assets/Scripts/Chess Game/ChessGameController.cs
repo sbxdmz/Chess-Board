@@ -15,6 +15,7 @@ public class ChessGameController : MonoBehaviour
     [SerializeField] private BoardLayout startingBoardLayout;
     [SerializeField] private Board board;
     [SerializeField] private ChessUIManager UIManager;
+    [SerializeField] private ChessHistoryManager historyManager;
 
     private PiecesCreator pieceCreator;
     private ChessPlayer whitePlayer;
@@ -22,6 +23,7 @@ public class ChessGameController : MonoBehaviour
     private ChessPlayer activePlayer;
 
     private GameState state;
+    
 
     public List<Vector2Int> test1;
     public List<Vector2Int> test2;
@@ -51,7 +53,7 @@ public class ChessGameController : MonoBehaviour
     {
         SetGameState(GameState.Init);
         UIManager.HideUI();
-        board.SetDependencies(this);
+        board.SetDependencies(this, historyManager);
         CreatePiecesFromLayout(startingBoardLayout);
         activePlayer = whitePlayer;
         GenerateAllPossiblePlayerMoves(activePlayer);
@@ -115,12 +117,16 @@ public class ChessGameController : MonoBehaviour
         GenerateAllPossiblePlayerMoves(activePlayer);
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         board.ClearBoardOfPassant(GetOpponentToPlayer(activePlayer));
-        if (CheckIfGameIsFinished() == ChessGameState.GameWon)
+        ChessGameState currentState = CheckIfGameIsFinished(); 
+        if (currentState == ChessGameState.GameWon)
         {
             EndGame();
         }
-        else if(CheckIfGameIsFinished() == ChessGameState.GameStalemate){
+        else if(currentState == ChessGameState.GameStalemate){
             StalemateGame();
+        }
+        else if(currentState == ChessGameState.GameCheck){
+            ChangeActiveTeam(); //check back
         }
         else
         {
@@ -167,7 +173,9 @@ public class ChessGameController : MonoBehaviour
             }
 
         }
-
+        if(isInCheck){
+            return ChessGameState.GameCheck;
+        }
         return ChessGameState.GameRunning;
     }
 
@@ -219,4 +227,4 @@ public class ChessGameController : MonoBehaviour
     }
 }
 
-public enum ChessGameState{GameRunning, GameWon, GameStalemate}
+public enum ChessGameState{GameRunning, GameWon, GameStalemate, GameCheck}
