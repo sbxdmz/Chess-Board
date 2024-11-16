@@ -96,5 +96,8 @@ public class ChessMove{
         }
         return null;
     }
+    public string GetSentence(){
+        return null;
+    }
 
 }

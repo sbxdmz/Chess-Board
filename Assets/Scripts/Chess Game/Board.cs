@@ -51,26 +51,43 @@ public class Board : MonoBehaviour
         return new Vector2Int(x, y);
     }
 
-    public void OnSquareSelected(Vector3 inputPosition)
+    public selectedStatus OnSquareSelected(Vector3 inputPosition)
     {
         Vector2Int coords = CalculateCoordsFromPosition(inputPosition);
+        return OnSquareSelected(coords);
+    }
+
+    public selectedStatus OnSquareSelected(Vector2Int coords)
+    {
         Piece piece = GetPieceOnSquare(coords);
         if (selectedPiece)
         {
-            if (piece != null && selectedPiece == piece)
+            if (piece != null && selectedPiece == piece){
                 DeselectPiece();
-            else if (piece != null && selectedPiece != piece && chessController.IsTeamTurnActive(piece.team))
+                return selectedStatus.deselect;
+            }
+            else if (piece != null && selectedPiece != piece && chessController.IsTeamTurnActive(piece.team)){
                 SelectPiece(piece);
-            else if (selectedPiece.CanMoveTo(coords))
+                return selectedStatus.select;
+            }
+            else if (selectedPiece.CanMoveTo(coords)){
                 OnSelectedPieceMoved(coords, selectedPiece);
+                return selectedStatus.move;
+            }
         }
         else
         {
-            if (piece != null && chessController.IsTeamTurnActive(piece.team))
+            if (piece != null && chessController.IsTeamTurnActive(piece.team)){
                 SelectPiece(piece);
+                return selectedStatus.select;
+            }
         }
+        return selectedStatus.invalid;
     }
 
+    public void DeselectAll(){
+        DeselectPiece();
+    }
 
 
     private void SelectPiece(Piece piece)
@@ -245,3 +262,7 @@ public class Board : MonoBehaviour
     }
 
 }
+
+public enum selectedStatus{
+        deselect, select, move, invalid
+    }
