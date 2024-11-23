@@ -18,14 +18,11 @@ public class ChessHistoryManager : MonoBehaviour
         
     }
     
-    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece){
-        ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece);
+    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck){
+        ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck);
         moveHistory.Add(newMove);
     }
 
-    public void RecordCheck(){
-        moveHistory[moveHistory.Count-1].UpdateCheckFlag(true);
-    }
 
     
 }
@@ -36,18 +33,19 @@ public class ChessMove{
     moveType MT;
     Piece movingPiece;
     Piece capturedPiece;
+    ChessPlayer team;
 
 
     bool causedCheck;
-    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece){
+    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck){
         this.origin = origin;
         this.destination = destination;
         this.MT = MT;
         this.capturedPiece = capturedPiece;
         this.movingPiece = movingPiece;
-    }
-    public void UpdateCheckFlag(bool causedCheck){
-        this.causedCheck = causedCheck;
+        this.team = team;
+        this. causedCheck = causedCheck;
+        Debug.Log(causedCheck);
     }
     public string getPieceAbbr(Piece piece){
         switch (piece.GetType().Name){

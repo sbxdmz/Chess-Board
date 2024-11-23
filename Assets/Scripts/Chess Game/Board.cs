@@ -133,7 +133,8 @@ public class Board : MonoBehaviour
         Piece movingPiece = piece;
         UpdateBoardOnPieceMove(coords, piece.occupiedSquare, piece, null);
         moveType MT = selectedPiece.MovePiece(coords);
-        historyManager.RecordMove(origin, coords, MT, takenPiece, movingPiece);
+        bool isInCheck = chessController.GetOpponentCheckStatus();
+        historyManager.RecordMove(origin, coords, MT, takenPiece, movingPiece, chessController.activePlayer, isInCheck);
         DeselectPiece();
         EndTurn();
     }

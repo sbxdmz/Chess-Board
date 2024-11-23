@@ -86,7 +86,7 @@ public class ChessPlayer
         selectedPiece.occupiedSquare = orgPos;
         foreach (var coords in coordsToRemove)
         {
-            Debug.Log("removing " + selectedPiece + " " + coords);
+            // Debug.Log("removing " + selectedPiece + " " + coords);
             selectedPiece.avaliableMoves.Remove(coords);
 		}
 		// Debug.Log("Coords to remove" + coordsToRemove.Count);

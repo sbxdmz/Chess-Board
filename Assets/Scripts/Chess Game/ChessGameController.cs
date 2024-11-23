@@ -20,7 +20,7 @@ public class ChessGameController : MonoBehaviour
     private PiecesCreator pieceCreator;
     private ChessPlayer whitePlayer;
     private ChessPlayer blackPlayer;
-    private ChessPlayer activePlayer;
+    public ChessPlayer activePlayer;
 
     private GameState state;
     
@@ -133,25 +133,34 @@ public class ChessGameController : MonoBehaviour
             ChangeActiveTeam();
         }
     }
-
+    public bool getCheckStatus(ChessPlayer player){
+        ChessPlayer oppositePlayer = GetOpponentToPlayer(player);
+        Piece[] kingAttackingPieces = activePlayer.GetPieceAtackingOppositePiceOfType<King>();
+        bool isInCheck = (kingAttackingPieces.Length > 0);
+        return isInCheck;
+    }
+    public bool getActiveCheckStatus(){
+        return getCheckStatus(activePlayer);
+    }
+    public bool GetOpponentCheckStatus(){
+        return getCheckStatus(GetOpponentToPlayer(activePlayer));
+    }
     private ChessGameState CheckIfGameIsFinished()
     {
-        ChessPlayer oppositePlayer = GetOpponentToPlayer(activePlayer);
         bool isInCheck = false;
+        ChessPlayer oppositePlayer = GetOpponentToPlayer(activePlayer);
         foreach (var piece in oppositePlayer.activePieces){
             bool foundAttack = oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, piece);
             if(foundAttack == true){
                 isInCheck = true;
             }
         }
+        
         Piece[] kingAttackingPieces = activePlayer.GetPieceAtackingOppositePiceOfType<King>();
         
             
         Piece attackedKing = oppositePlayer.GetPiecesOfType<King>().FirstOrDefault();
         //oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, attackedKing);
-        if(isInCheck){
-            Debug.Log("check");
-        }
         test1 = new List<Vector2Int>();
         test2 = new List<Vector2Int>();
         if (oppositePlayer.team == TeamColor.White){

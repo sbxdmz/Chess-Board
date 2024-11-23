@@ -29,23 +29,24 @@ public class ExternalInputHandler : MonoBehaviour
     }
 
     public bool MakeMove(string move){
+        board.DeselectAll();
         string firstSquareString = move.Substring(0, 2);
         string secondSquareString = move.Substring(2, 2);
         Vector2Int firstSquare = GetSquareFromString(firstSquareString);
         Vector2Int secondSquare = GetSquareFromString(secondSquareString);
         selectedStatus status = board.OnSquareSelected(firstSquare);
         if(status == selectedStatus.invalid || status == selectedStatus.deselect){
-            Debug.Log("Invalid");
+            // Debug.Log("Invalid");
             board.DeselectAll();
             return false;
         } 
         status = board.OnSquareSelected(secondSquare);
         if(status != selectedStatus.move){
-            Debug.Log("Invalid");
+            // Debug.Log("Invalid");
             board.DeselectAll();
             return false;
         } 
-        Debug.Log("Made Move");
+        // Debug.Log("Made Move");
         return true;        
     }
 
@@ -68,7 +69,7 @@ public class ExternalInputHandler : MonoBehaviour
         int y = (int) Char.GetNumericValue(secondChar) - 1;
 
         Vector2Int result = new Vector2Int(x, y);
-        Debug.Log(result);
+        // Debug.Log(result);
         return result;
     }
 }
