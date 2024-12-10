@@ -11,7 +11,7 @@ public class Bishop : Piece
         new Vector2Int(-1, 1),
         new Vector2Int(-1,- 1),
     };
-    public override List<Vector2Int> SelectAvaliableSquares()
+    public override List<Vector2Int> SelectAvailableSquares()
     {
         avaliableMoves.Clear();
         float range = Board.BOARD_SIZE;

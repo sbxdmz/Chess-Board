@@ -35,7 +35,7 @@ public class ChessPlayer
 		foreach (var piece in activePieces)
 		{
 			if(board.HasPiece(piece))
-				piece.SelectAvaliableSquares();
+				piece.SelectAvailableSquares();
 		}
 	}
 
@@ -50,7 +50,7 @@ public class ChessPlayer
 		return Result;
 	} 
 
-	public Piece[] GetPieceAtackingOppositePiceOfType<T>() where T : Piece
+	public Piece[] GetPieceAttackingOppositePieceOfType<T>() where T : Piece
 	{
 		return activePieces.Where(p => p.IsAttackingPieceOfType<T>()).ToArray();
 	}
@@ -60,7 +60,7 @@ public class ChessPlayer
 		return activePieces.Where(p => p is T).ToArray();
 	}
 
-	public bool RemoveMovesEnablingAttakOnPieceOfType<T>(ChessPlayer opponent, Piece selectedPiece) where T : Piece
+	public bool RemoveMovesEnablingAttackOnPieceOfType<T>(ChessPlayer opponent, Piece selectedPiece) where T : Piece
 	{
 		List<Vector2Int> coordsToRemove = new List<Vector2Int>();
 
@@ -76,7 +76,7 @@ public class ChessPlayer
 				Debug.Log(selectedPiece.occupiedSquare);
             }*/
             opponent.GenerateAllPossibleMoves();
-			if (opponent.CheckIfIsAttacigPiece<T>())
+			if (opponent.CheckIfIsAttackingPiece<T>())
 			{
 				coordsToRemove.Add(coords);
 			}
@@ -97,7 +97,7 @@ public class ChessPlayer
 
 	}
 
-	internal bool CheckIfIsAttacigPiece<T>() where T : Piece
+	internal bool CheckIfIsAttackingPiece<T>() where T : Piece
 	{
 		foreach (var piece in activePieces)
 		{
@@ -119,7 +119,7 @@ public class ChessPlayer
 				board.UpdateBoardOnPieceMove(coords, piece.occupiedSquare, piece, null);
                 piece.occupiedSquare = coords;
                 opponent.GenerateAllPossibleMoves();
-				if (!opponent.CheckIfIsAttacigPiece<T>())
+				if (!opponent.CheckIfIsAttackingPiece<T>())
 				{
 					board.UpdateBoardOnPieceMove(orgPos, coords, piece, pieceOnCoords);
                     piece.occupiedSquare = orgPos;

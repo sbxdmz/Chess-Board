@@ -137,7 +137,7 @@ public class ChessGameController : MonoBehaviour
         GenerateAllPossiblePlayerMoves(activePlayer);
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         ChessPlayer oppositePlayer = GetOpponentToPlayer(player);
-        bool isInCheck = oppositePlayer.CheckIfIsAttacigPiece<King>();
+        bool isInCheck = oppositePlayer.CheckIfIsAttackingPiece<King>();
         return isInCheck;
     }
     public bool getActiveCheckStatus(){
@@ -151,17 +151,17 @@ public class ChessGameController : MonoBehaviour
         bool isInCheck = false;
         ChessPlayer oppositePlayer = GetOpponentToPlayer(activePlayer);
         foreach (var piece in oppositePlayer.activePieces){
-            bool foundAttack = oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, piece);
+            bool foundAttack = oppositePlayer.RemoveMovesEnablingAttackOnPieceOfType<King>(activePlayer, piece);
             if(foundAttack == true){
                 isInCheck = true;
             }
         }
         
-        Piece[] kingAttackingPieces = activePlayer.GetPieceAtackingOppositePiceOfType<King>();
+        Piece[] kingAttackingPieces = activePlayer.GetPieceAttackingOppositePieceOfType<King>();
         
             
         Piece attackedKing = oppositePlayer.GetPiecesOfType<King>().FirstOrDefault();
-        //oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, attackedKing);
+        //oppositePlayer.RemoveMovesEnablingAttackOnPieceOfType<King>(activePlayer, attackedKing);
         test1 = new List<Vector2Int>();
         test2 = new List<Vector2Int>();
         if (oppositePlayer.team == TeamColor.White){
@@ -171,8 +171,8 @@ public class ChessGameController : MonoBehaviour
             test2 = oppositePlayer.GetAllPossibleMoves();
         }
         
-        int avaliableKingMoves = attackedKing.avaliableMoves.Count;
-        if (avaliableKingMoves == 0)
+        int availableKingMoves = attackedKing.avaliableMoves.Count;
+        if (availableKingMoves == 0)
         {
             bool canCoverKing = oppositePlayer.CanHidePieceFromAttack<King>(activePlayer);
             if (!canCoverKing){
@@ -231,9 +231,9 @@ public class ChessGameController : MonoBehaviour
         pieceOwner.RemovePiece(piece);
     }
 
-    internal void RemoveMovesEnablingAttakOnPieceOfType<T>(Piece piece) where T : Piece
+    internal void RemoveMovesEnablingAttackOnPieceOfType<T>(Piece piece) where T : Piece
     {
-        activePlayer.RemoveMovesEnablingAttakOnPieceOfType<T>(GetOpponentToPlayer(activePlayer), piece);
+        activePlayer.RemoveMovesEnablingAttackOnPieceOfType<T>(GetOpponentToPlayer(activePlayer), piece);
     }
 }
 

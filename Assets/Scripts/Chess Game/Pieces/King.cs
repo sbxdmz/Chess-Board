@@ -24,7 +24,7 @@ public class King : Piece
     private Vector2Int leftCastlingMove;
     private Vector2Int rightCastlingMove;
 
-    public override List<Vector2Int> SelectAvaliableSquares()
+    public override List<Vector2Int> SelectAvailableSquares()
     {
         avaliableMoves.Clear();
         AssignStandardMoves();
