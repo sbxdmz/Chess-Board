@@ -18,9 +18,10 @@ public class ChessHistoryManager : MonoBehaviour
         
     }
     
-    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck){
-        ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck);
+    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
+        ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate);
         moveHistory.Add(newMove);
+        Debug.Log(newMove.GetAlgebraicNotation());
     }
 
 
@@ -34,18 +35,17 @@ public class ChessMove{
     Piece movingPiece;
     Piece capturedPiece;
     ChessPlayer team;
-
-
     bool causedCheck;
-    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck){
+    bool causedCheckmate;
+    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
         this.origin = origin;
         this.destination = destination;
         this.MT = MT;
         this.capturedPiece = capturedPiece;
         this.movingPiece = movingPiece;
         this.team = team;
-        this. causedCheck = causedCheck;
-        Debug.Log(causedCheck);
+        this.causedCheck = causedCheck;
+        this.causedCheckmate = causedCheckmate;
     }
     public string getPieceAbbr(Piece piece){
         switch (piece.GetType().Name){
@@ -75,16 +75,25 @@ public class ChessMove{
     }
     public string GetAlgebraicNotation(){
         string captureString = "";
-        string checkString = "" ;
-        
+        string checkString = "";
+        string originString = "";
+        string originSquare = getSquare(origin);
+
         if(capturedPiece != null){
+            if(movingPiece.GetType().Name == "Pawn"){
+                originString = originSquare.Substring(0,1);
+            }
             captureString = "x";
         }
-        if(causedCheck){
-            checkString = "+"; //add Check/CheckMate
+        if(causedCheckmate){
+            checkString = "#";
         }
+        else if(causedCheck){
+            checkString = "+";
+        }
+
         if(MT == moveType.normal){
-        return getPieceAbbr(movingPiece) + captureString + getSquare(destination) + checkString;
+        return originString + getPieceAbbr(movingPiece) + captureString + getSquare(destination) + checkString;
         }
         else if(MT == moveType.shortCastle){
             return "O-O" + checkString;

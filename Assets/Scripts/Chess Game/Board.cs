@@ -134,7 +134,8 @@ public class Board : MonoBehaviour
         UpdateBoardOnPieceMove(coords, piece.occupiedSquare, piece, null);
         moveType MT = selectedPiece.MovePiece(coords);
         bool isInCheck = chessController.GetOpponentCheckStatus();
-        historyManager.RecordMove(origin, coords, MT, takenPiece, movingPiece, chessController.activePlayer, isInCheck);
+        bool isInCheckmate = chessController.CheckIfGameIsFinished() == ChessGameState.GameWon;
+        historyManager.RecordMove(origin, coords, MT, takenPiece, movingPiece, chessController.activePlayer, isInCheck, isInCheckmate);
         DeselectPiece();
         EndTurn();
     }

@@ -146,7 +146,7 @@ public class ChessGameController : MonoBehaviour
     public bool GetOpponentCheckStatus(){
         return getCheckStatus(GetOpponentToPlayer(activePlayer));
     }
-    private ChessGameState CheckIfGameIsFinished()
+    public ChessGameState CheckIfGameIsFinished()
     {
         bool isInCheck = false;
         ChessPlayer oppositePlayer = GetOpponentToPlayer(activePlayer);
