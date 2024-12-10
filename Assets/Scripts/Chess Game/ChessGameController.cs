@@ -134,9 +134,10 @@ public class ChessGameController : MonoBehaviour
         }
     }
     public bool getCheckStatus(ChessPlayer player){
+        GenerateAllPossiblePlayerMoves(activePlayer);
+        GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         ChessPlayer oppositePlayer = GetOpponentToPlayer(player);
-        Piece[] kingAttackingPieces = activePlayer.GetPieceAtackingOppositePiceOfType<King>();
-        bool isInCheck = (kingAttackingPieces.Length > 0);
+        bool isInCheck = oppositePlayer.CheckIfIsAttacigPiece<King>();
         return isInCheck;
     }
     public bool getActiveCheckStatus(){

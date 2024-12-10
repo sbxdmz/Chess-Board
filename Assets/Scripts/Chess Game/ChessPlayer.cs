@@ -101,8 +101,9 @@ public class ChessPlayer
 	{
 		foreach (var piece in activePieces)
 		{
-			if (board.HasPiece(piece) && piece.IsAttackingPieceOfType<T>())
+			if (board.HasPiece(piece) && piece.IsAttackingPieceOfType<T>()){
 				return true;
+			}
 		}
 		return false;
 	}
