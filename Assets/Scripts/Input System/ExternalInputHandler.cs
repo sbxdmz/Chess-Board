@@ -10,15 +10,6 @@ public class ExternalInputHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(wait());
-        IEnumerator wait(){
-            
-            yield return new WaitForSeconds(1);
-            MakeMove("e2e4");
-            MakeMove("e7e5");
-            MakeMove("g1f3");
-            MakeMove("b8c6");
-        }
         
     }
 

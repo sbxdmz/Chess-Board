@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using TMPro;
 public class ChessHistoryManager : MonoBehaviour
-{
+{   
+    public TextMeshProUGUI PGNText;
     public List<ChessMove> moveHistory = new List<ChessMove>();
-
+    public TTSManager tts;
+    private string PGNString;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +23,9 @@ public class ChessHistoryManager : MonoBehaviour
     public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
         ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate);
         moveHistory.Add(newMove);
-        Debug.Log(newMove.GetAlgebraicNotation());
+        tts.AnnounceMove(newMove);
+        PGNString += newMove.GetAlgebraicNotation() + " ";
+        PGNText.text = PGNString;
     }
 
 
@@ -29,14 +33,14 @@ public class ChessHistoryManager : MonoBehaviour
 }
 [System.Serializable]
 public class ChessMove{
-    Vector2Int origin;
-    Vector2Int destination;
-    moveType MT;
-    Piece movingPiece;
-    Piece capturedPiece;
-    ChessPlayer team;
-    bool causedCheck;
-    bool causedCheckmate;
+    public Vector2Int origin;
+    public Vector2Int destination;
+    public moveType MT;
+    public Piece movingPiece;
+    public Piece capturedPiece;
+    public ChessPlayer team;
+    public bool causedCheck;
+    public bool causedCheckmate;
     public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
         this.origin = origin;
         this.destination = destination;
@@ -66,6 +70,22 @@ public class ChessMove{
             case 3: result += "d"; break;
             case 4: result += "e"; break;
             case 5: result += "f"; break;
+            case 6: result += "g"; break;
+            case 7: result += "h"; break;
+        }
+        result += (coords.y + 1);
+
+        return result;
+    }
+    public string getSquarePhonetic(Vector2Int coords){
+        string result = "";
+        switch (coords.x){
+            case 0: result += "eigh"; break;
+            case 1: result += "b"; break;
+            case 2: result += "s"; break;
+            case 3: result += "d"; break;
+            case 4: result += "e"; break;
+            case 5: result += "e"; break;
             case 6: result += "g"; break;
             case 7: result += "h"; break;
         }
