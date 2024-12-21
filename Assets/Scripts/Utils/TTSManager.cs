@@ -28,8 +28,9 @@ public class TTSManager : MonoBehaviour
         else{
             speechString = move.movingPiece.GetType().Name;
             speechString += " " + move.getSquarePhonetic(move.origin);
-            if(move.capturedPiece != null){
-                speechString += " takes " + move.capturedPiece.GetType().Name + " on ";
+            if(move.capturedPiece){
+                // speechString += " takes " + move.capturedPiece.GetType().Name + " on ";
+                speechString = " captures ";
             }
             else{
                 speechString += " to ";

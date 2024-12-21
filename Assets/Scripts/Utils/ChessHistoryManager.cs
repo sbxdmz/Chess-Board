@@ -20,28 +20,51 @@ public class ChessHistoryManager : MonoBehaviour
         
     }
     
-    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
+    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, bool capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
         ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate);
         moveHistory.Add(newMove);
         tts.AnnounceMove(newMove);
-        PGNString += newMove.GetAlgebraicNotation() + " ";
+        PGNString = GetPGN();
         PGNText.text = PGNString;
     }
 
+    public void RecordPromotion(Piece promotedPiece){
+        ChessMove lastMove = moveHistory[moveHistory.Count - 1];
+        lastMove.promotedPiece = promotedPiece;
+        PGNString = GetPGN();
+        PGNText.text = PGNString;
+    }
 
-    
+    public string GetPGN(){
+        string result = "";
+        int moveCount = 0;
+        for(int i = 0; i < moveHistory.Count; i++){
+            if(i % 2 == 0){
+                moveCount += 1;
+                result += moveCount + ". ";
+            }
+            
+            ChessMove move = moveHistory[i];
+            result += move.GetAlgebraicNotation() + " ";
+        }
+        return result;
+    }
+
 }
+
 [System.Serializable]
 public class ChessMove{
     public Vector2Int origin;
     public Vector2Int destination;
     public moveType MT;
     public Piece movingPiece;
-    public Piece capturedPiece;
+    public bool capturedPiece;
+    public Piece promotedPiece;
     public ChessPlayer team;
     public bool causedCheck;
     public bool causedCheckmate;
-    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
+
+    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, bool capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
         this.origin = origin;
         this.destination = destination;
         this.MT = MT;
@@ -58,6 +81,7 @@ public class ChessMove{
             case "King": return "K";
             case "Bishop": return "B";
             case "Queen": return "Q"; 
+            case "Rook": return "R";
         }
         return null;
     }
@@ -98,12 +122,16 @@ public class ChessMove{
         string checkString = "";
         string originString = "";
         string originSquare = getSquare(origin);
-
-        if(capturedPiece != null){
+        string promotionString = "";
+        if(promotedPiece != null){
+            promotionString += "=" + getPieceAbbr(promotedPiece);
+        }
+        if(capturedPiece){
             if(movingPiece.GetType().Name == "Pawn"){
                 originString = originSquare.Substring(0,1);
             }
             captureString = "x";
+
         }
         if(causedCheckmate){
             checkString = "#";
@@ -113,7 +141,7 @@ public class ChessMove{
         }
 
         if(MT == moveType.normal){
-        return originString + getPieceAbbr(movingPiece) + captureString + getSquare(destination) + checkString;
+        return originString + getPieceAbbr(movingPiece) + captureString + getSquare(destination) + promotionString + checkString;
         }
         else if(MT == moveType.shortCastle){
             return "O-O" + checkString;

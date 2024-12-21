@@ -135,7 +135,7 @@ public class Board : MonoBehaviour
         moveType MT = selectedPiece.MovePiece(coords);
         bool isInCheck = chessController.GetOpponentCheckStatus();
         bool isInCheckmate = chessController.CheckIfGameIsFinished() == ChessGameState.GameWon;
-        historyManager.RecordMove(origin, coords, MT, takenPiece, movingPiece, chessController.activePlayer, isInCheck, isInCheckmate);
+        historyManager.RecordMove(origin, coords, MT, (takenPiece != null), movingPiece, chessController.activePlayer, isInCheck, isInCheckmate);
         DeselectPiece();
         EndTurn();
     }
@@ -240,14 +240,16 @@ public class Board : MonoBehaviour
         IEnumerator waitForButtonSelect(){
             yield return new WaitUntil(()=>chosenPiece != "");
             TakePiece(piece);
+            Piece newPiece = null;
             switch(chosenPiece){
-                case "Queen": chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Queen)); break;
-                case "Knight":chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Knight)); break;
-                case "Rook":chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Rook)); break;
-                case "Bishop":chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Bishop)); break;
+                case "Queen": newPiece = chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Queen)); break;
+                case "Knight": newPiece = chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Knight)); break;
+                case "Rook": newPiece = chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Rook)); break;
+                case "Bishop": newPiece = chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Bishop)); break;
             }   
             chosenPiece = "";
             promotionScreen.SetActive(false);
+            historyManager.RecordPromotion(newPiece);
         } 
         
         

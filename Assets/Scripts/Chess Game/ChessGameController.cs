@@ -86,7 +86,7 @@ public class ChessGameController : MonoBehaviour
 
 
 
-    public void CreatePieceAndInitialize(Vector2Int squareCoords, TeamColor team, Type type)
+    public Piece CreatePieceAndInitialize(Vector2Int squareCoords, TeamColor team, Type type)
     {
         Piece newPiece = pieceCreator.CreatePiece(type).GetComponent<Piece>();
         newPiece.SetData(squareCoords, team, board);
@@ -100,6 +100,8 @@ public class ChessGameController : MonoBehaviour
 
         ChessPlayer currentPlayer = team == TeamColor.White ? whitePlayer : blackPlayer;
         currentPlayer.AddPiece(newPiece);
+
+        return newPiece;
     }
 
     private void GenerateAllPossiblePlayerMoves(ChessPlayer player)
@@ -117,6 +119,7 @@ public class ChessGameController : MonoBehaviour
         GenerateAllPossiblePlayerMoves(activePlayer);
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         board.ClearBoardOfPassant(GetOpponentToPlayer(activePlayer));
+        GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         ChessGameState currentState = CheckIfGameIsFinished(); 
         if (currentState == ChessGameState.GameWon)
         {
