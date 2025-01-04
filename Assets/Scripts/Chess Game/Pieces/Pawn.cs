@@ -48,16 +48,20 @@ public class Pawn : Piece
         }
 
         base.MovePiece(coords);
-        CheckPromotion();
+        if(CheckPromotion()){
+            return moveType.promotion;
+        }
         return moveType.normal;
     }
 
-    private void CheckPromotion()
+    private bool CheckPromotion()
     {
         int endOfBoardYCoord = team == TeamColor.White ? Board.BOARD_SIZE - 1 : 0;
         if (occupiedSquare.y == endOfBoardYCoord)
         {
             board.PromotePiece(this);
+            return true;
         }
+        return false;
     }
 }

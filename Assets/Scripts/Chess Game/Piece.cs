@@ -87,5 +87,5 @@ public abstract class Piece : MonoBehaviour
 
 }
 public enum moveType{
-	normal, shortCastle, longCastle
+	normal, shortCastle, longCastle, promotion
 }

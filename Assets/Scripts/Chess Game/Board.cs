@@ -135,9 +135,16 @@ public class Board : MonoBehaviour
         moveType MT = selectedPiece.MovePiece(coords);
         bool isInCheck = chessController.GetOpponentCheckStatus();
         bool isInCheckmate = chessController.CheckIfGameIsFinished() == ChessGameState.GameWon;
-        historyManager.RecordMove(origin, coords, MT, (takenPiece != null), movingPiece, chessController.activePlayer, isInCheck, isInCheckmate);
+        string capturedPieceString = "";
+        if (takenPiece != null){
+            capturedPieceString = takenPiece.GetType().Name;
+        }
+        historyManager.RecordMove(origin, coords, MT, capturedPieceString, movingPiece, chessController.activePlayer, isInCheck, isInCheckmate);
         DeselectPiece();
-        EndTurn();
+        if(MT != moveType.promotion){
+            EndTurn();
+        }
+        
     }
 
     private void EndTurn()

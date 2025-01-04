@@ -20,7 +20,7 @@ public class ChessHistoryManager : MonoBehaviour
         
     }
     
-    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, bool capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
+    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
         ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate);
         moveHistory.Add(newMove);
         tts.AnnounceMove(newMove);
@@ -58,13 +58,13 @@ public class ChessMove{
     public Vector2Int destination;
     public moveType MT;
     public Piece movingPiece;
-    public bool capturedPiece;
+    public string capturedPiece;
     public Piece promotedPiece;
     public ChessPlayer team;
     public bool causedCheck;
     public bool causedCheckmate;
 
-    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, bool capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
+    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
         this.origin = origin;
         this.destination = destination;
         this.MT = MT;
@@ -106,10 +106,10 @@ public class ChessMove{
         switch (coords.x){
             case 0: result += "eigh"; break;
             case 1: result += "b"; break;
-            case 2: result += "s"; break;
+            case 2: result += "c"; break;
             case 3: result += "d"; break;
             case 4: result += "e"; break;
-            case 5: result += "e"; break;
+            case 5: result += "f"; break;
             case 6: result += "g"; break;
             case 7: result += "h"; break;
         }
@@ -126,7 +126,7 @@ public class ChessMove{
         if(promotedPiece != null){
             promotionString += "=" + getPieceAbbr(promotedPiece);
         }
-        if(capturedPiece){
+        if(capturedPiece != ""){
             if(movingPiece.GetType().Name == "Pawn"){
                 originString = originSquare.Substring(0,1);
             }
