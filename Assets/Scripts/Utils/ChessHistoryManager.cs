@@ -11,7 +11,7 @@ public class ChessHistoryManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+      
     }
 
     // Update is called once per frame
@@ -49,6 +49,40 @@ public class ChessHistoryManager : MonoBehaviour
         }
         return result;
     }
+//
+    public string GetFEN(Piece[,] board, ChessPlayer toMove){
+        string result = "";
+        King whiteKing = null;
+        King blackKing = null;
+        for(int r = 7; r >= 0; r--){
+            for(int c = 0; c < 8; c++){
+                if(board[c,r] == null){
+                    result += "S";
+                    continue;
+                }
+                else if(board[c,r].occupiedSquare != new Vector2Int(c,r)){
+                    result += "E";
+                    continue;
+                }
+                if(board[c,r].GetType().Name == "King"){
+                    if(board[c,r].team == TeamColor.Black){
+                        blackKing = (King) board[c,r];
+                    }
+                    else{
+                        whiteKing = (King) board[c,r];
+                    }
+                }
+                string currentPiece = MyUtils.getPieceAbbrFEN(board[c,r]);    
+                if(board[c,r].team == TeamColor.Black){
+                    currentPiece = currentPiece.ToLower();
+                }
+                result += currentPiece;
+            }
+            result += "/";
+        }
+        result += toMove.team == TeamColor.White?"w ":"b " + whiteKing.GetCastlingRights() + blackKing.GetCastlingRights();
+        return result;
+    }
 
 }
 
@@ -74,57 +108,14 @@ public class ChessMove{
         this.causedCheck = causedCheck;
         this.causedCheckmate = causedCheckmate;
     }
-    public string getPieceAbbr(Piece piece){
-        switch (piece.GetType().Name){
-            case "Pawn": return ""; 
-            case "Knight": return "N";
-            case "King": return "K";
-            case "Bishop": return "B";
-            case "Queen": return "Q"; 
-            case "Rook": return "R";
-        }
-        return null;
-    }
-    public string getSquare(Vector2Int coords){
-        string result = "";
-        switch (coords.x){
-            case 0: result += "a"; break;
-            case 1: result += "b"; break;
-            case 2: result += "c"; break;
-            case 3: result += "d"; break;
-            case 4: result += "e"; break;
-            case 5: result += "f"; break;
-            case 6: result += "g"; break;
-            case 7: result += "h"; break;
-        }
-        result += (coords.y + 1);
-
-        return result;
-    }
-    public string getSquarePhonetic(Vector2Int coords){
-        string result = "";
-        switch (coords.x){
-            case 0: result += "eigh"; break;
-            case 1: result += "b"; break;
-            case 2: result += "c"; break;
-            case 3: result += "d"; break;
-            case 4: result += "e"; break;
-            case 5: result += "f"; break;
-            case 6: result += "g"; break;
-            case 7: result += "h"; break;
-        }
-        result += (coords.y + 1);
-
-        return result;
-    }
     public string GetAlgebraicNotation(){
         string captureString = "";
         string checkString = "";
         string originString = "";
-        string originSquare = getSquare(origin);
+        string originSquare = MyUtils.getSquare(origin);
         string promotionString = "";
         if(promotedPiece != null){
-            promotionString += "=" + getPieceAbbr(promotedPiece);
+            promotionString += "=" + MyUtils.getPieceAbbr(promotedPiece);
         }
         if(capturedPiece != ""){
             if(movingPiece.GetType().Name == "Pawn"){
@@ -141,7 +132,7 @@ public class ChessMove{
         }
 
         if(MT == moveType.normal){
-        return originString + getPieceAbbr(movingPiece) + captureString + getSquare(destination) + promotionString + checkString;
+        return originString + MyUtils.getPieceAbbr(movingPiece) + captureString + MyUtils.getSquare(destination) + promotionString + checkString;
         }
         else if(MT == moveType.shortCastle){
             return "O-O" + checkString;

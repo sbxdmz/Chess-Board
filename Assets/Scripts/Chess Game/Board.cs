@@ -7,6 +7,7 @@ using UnityEngine.Analytics;
 [RequireComponent(typeof(SquareSelectorCreator))]
 public class Board : MonoBehaviour
 {
+
     public const int BOARD_SIZE = 8;
 
     [SerializeField] private Transform bottomLeftSquareTransform;
@@ -25,7 +26,13 @@ public class Board : MonoBehaviour
         squareSelector = GetComponent<SquareSelectorCreator>();
         CreateGrid();
     }
-
+    private void Start(){
+    }
+    private void Update(){
+        if(Input.GetKeyDown(KeyCode.Space)){
+            Debug.Log(historyManager.GetFEN(grid, chessController.activePlayer));
+        }
+    }
     public void SetDependencies(ChessGameController chessController, ChessHistoryManager historyManager)
     {
         this.chessController = chessController;

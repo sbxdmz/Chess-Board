@@ -115,5 +115,9 @@ public class King : Piece
         }
         return moveType.normal;
     }
-
+    public string GetCastlingRights(){
+        string kingSide = !(rightRook.hasMoved || this.hasMoved)?"K":"";
+        string queenSide = !(leftRook.hasMoved || this.hasMoved)?"Q":"";
+        return kingSide + queenSide;
+    }
 }

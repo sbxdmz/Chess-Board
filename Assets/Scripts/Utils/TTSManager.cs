@@ -27,14 +27,14 @@ public class TTSManager : MonoBehaviour
         }
         else{
             speechString = move.movingPiece.GetType().Name;
-            speechString += " " + move.getSquarePhonetic(move.origin);
+            speechString += " " + MyUtils.getSquarePhonetic(move.origin);
             if(move.capturedPiece != ""){
                 speechString += " takes " + move.capturedPiece + " on ";
             }
             else{
                 speechString += " to ";
             } 
-            speechString += move.getSquarePhonetic(move.destination);
+            speechString += MyUtils.getSquarePhonetic(move.destination);
         }
         voice.Speak(speechString, SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
         
