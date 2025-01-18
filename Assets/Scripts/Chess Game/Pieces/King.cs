@@ -24,6 +24,9 @@ public class King : Piece
     private Vector2Int leftCastlingMove;
     private Vector2Int rightCastlingMove;
 
+    public bool canCastleLeft = true;
+    public bool canCastleRight = true;
+
     public override List<Vector2Int> SelectAvailableSquares()
     {
         avaliableMoves.Clear();
@@ -39,17 +42,23 @@ public class King : Piece
         rightCastlingMove = new Vector2Int(-1, -1);
         if (!hasMoved)
         {
-            leftRook = GetPieceInDirection<Rook>(team, Vector2Int.left);
-            if (leftRook && !leftRook.hasMoved)
+            if (canCastleLeft)
             {
-                leftCastlingMove = occupiedSquare + Vector2Int.left * 2;
-                avaliableMoves.Add(leftCastlingMove);
+                leftRook = GetPieceInDirection<Rook>(team, Vector2Int.left);
+                if (leftRook && !leftRook.hasMoved)
+                {
+                    leftCastlingMove = occupiedSquare + Vector2Int.left * 2;
+                    avaliableMoves.Add(leftCastlingMove);
+                }
             }
-            rightRook = GetPieceInDirection<Rook>(team, Vector2Int.right);
-            if (rightRook && !rightRook.hasMoved)
+            if (canCastleRight)
             {
-                rightCastlingMove = occupiedSquare + Vector2Int.right * 2;
-                avaliableMoves.Add(rightCastlingMove);
+                rightRook = GetPieceInDirection<Rook>(team, Vector2Int.right);
+                if (rightRook && !rightRook.hasMoved)
+                {
+                    rightCastlingMove = occupiedSquare + Vector2Int.right * 2;
+                    avaliableMoves.Add(rightCastlingMove);
+                }
             }
         }
     }

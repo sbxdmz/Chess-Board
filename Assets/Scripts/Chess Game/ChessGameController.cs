@@ -54,8 +54,9 @@ public class ChessGameController : MonoBehaviour
         SetGameState(GameState.Init);
         UIManager.HideUI();
         board.SetDependencies(this, historyManager);
-        CreatePiecesFromLayout(startingBoardLayout);
+        //CreatePiecesFromLayout(startingBoardLayout);
         activePlayer = whitePlayer;
+        CreatePiecesFromFEN("rnbqkbnr/ppp1pppp/8/8/2Pp4/3PP3/PP3PPP/RNBQKBNR b KQkq c3 0 1");
         GenerateAllPossiblePlayerMoves(activePlayer);
         SetGameState(GameState.Play);
     }
@@ -84,7 +85,129 @@ public class ChessGameController : MonoBehaviour
         }
     }
 
+    enum FENPhase
+    {
+        BoardLayout,
+        Team,
+        CastlingRights,
+        EnPassant,
+        HalfmoveClock,
+        FullmoveNumber
+    }
+    private void CreatePiecesFromFEN(string FEN)
+    {
+        TeamColor nextToPlay = (TeamColor)(-1);
+        
+        King whiteKing = null;
+        King blackKing = null;
 
+        int rank = 0;
+        int file = 7;
+        FENPhase currentPhase = FENPhase.BoardLayout;
+        
+        for (int characterIndex = 0; characterIndex < FEN.Length; characterIndex++) 
+        {
+            char c = FEN[characterIndex];
+            if(c == ' ')
+            {
+                if(currentPhase == FENPhase.BoardLayout)
+                {
+                    whiteKing.canCastleLeft = false;
+                    whiteKing.canCastleRight = false;
+                    blackKing.canCastleLeft = false;
+                    blackKing.canCastleRight = false;
+                }
+                currentPhase++;
+                continue;
+            }
+
+            if (currentPhase == FENPhase.BoardLayout)
+            {
+                if (c == '/')
+                {
+                    file--;
+                    rank = 0;
+                    continue;
+                }
+
+                if (char.IsNumber(c))
+                {
+                    int numberOfSpaces = (int)char.GetNumericValue(c);
+                    rank += numberOfSpaces;
+                    continue;
+                }
+
+                Type newPieceType = MyUtils.GetPieceTypeFromAbbreviation(c);
+                TeamColor newTeam = MyUtils.GetTeamColorFromAbbreviation(c);
+                Vector2Int squareCoords = new Vector2Int(rank, file);
+                Piece createdPiece = CreatePieceAndInitialize(squareCoords, newTeam, newPieceType);
+                if(newPieceType == typeof(King))
+                {
+                    if(newTeam == TeamColor.White)
+                    {
+                        whiteKing = (King)createdPiece;
+                    }
+                    else if (newTeam == TeamColor.Black)
+                    {
+                        blackKing = (King)createdPiece;
+                    }
+                }
+
+                rank++;
+            }
+            else if (currentPhase == FENPhase.Team)
+            {
+                if (c == 'w')
+                {
+                    activePlayer = whitePlayer;
+                }
+                else if (c == 'b')
+                {
+                    activePlayer = blackPlayer;
+                }
+            }
+            else if (currentPhase == FENPhase.CastlingRights)
+            {
+                switch (c)
+                {
+                    case 'K':
+                        whiteKing.canCastleRight = true;
+                        break;
+
+                    case 'Q':
+                        whiteKing.canCastleLeft = true;
+                        break;
+
+                    case 'k':
+                        blackKing.canCastleRight = true;
+                        break;
+
+                    case 'q':
+                        blackKing.canCastleLeft = true;
+                        break;
+                }
+            }
+            else if (currentPhase == FENPhase.EnPassant)
+            {
+                if(char.IsLetter(c) && char.IsNumber(FEN[characterIndex + 1]))
+                {
+                    string squareString = (c.ToString() + FEN[characterIndex + 1].ToString());
+                    Vector2Int squareCoords = MyUtils.getCoords(squareString);
+                    Piece createdPiece = CreateEnPassantPiece(squareCoords);
+                }
+            }
+            else if (currentPhase == FENPhase.HalfmoveClock)
+            {
+
+            }
+            else if (currentPhase == FENPhase.FullmoveNumber)
+            {
+
+            }
+
+
+        }
+    }
 
     public Piece CreatePieceAndInitialize(Vector2Int squareCoords, TeamColor team, Type type)
     {
@@ -102,6 +225,24 @@ public class ChessGameController : MonoBehaviour
         currentPlayer.AddPiece(newPiece);
 
         return newPiece;
+    }
+    public Piece CreateEnPassantPiece(Vector2Int squareCoords)
+    {
+        Vector2Int squareAbove = squareCoords + Vector2Int.up;
+        Vector2Int squareBelow = squareCoords + Vector2Int.down;
+        Piece targetPawn = null;
+        Piece pieceAbove = board.GetPieceOnSquare(squareAbove);
+        Piece pieceBelow = board.GetPieceOnSquare(squareBelow);
+        if (pieceAbove != null && pieceAbove.GetType() == typeof(Pawn))
+        {
+            targetPawn = pieceAbove;
+        }
+        else if (pieceBelow != null && pieceBelow.GetType() == typeof(Pawn))
+        {
+            targetPawn = pieceBelow;
+        }
+        board.SetPieceOnBoard(squareCoords, targetPawn);
+        return targetPawn;
     }
 
     private void GenerateAllPossiblePlayerMoves(ChessPlayer player)
