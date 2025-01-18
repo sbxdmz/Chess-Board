@@ -73,6 +73,25 @@ public class King : Piece
         return null;
     }
 
+    private Piece GetPieceInDirectionUnblocked<T>(TeamColor team, Vector2Int direction)
+    {
+        for (int i = 1; i <= Board.BOARD_SIZE; i++)
+        {
+            Vector2Int nextCoords = occupiedSquare + direction * i;
+            Piece piece = board.GetPieceOnSquare(nextCoords);
+            if (!board.CheckIfCoordinatesAreOnBoard(nextCoords))
+                return null;
+            if (piece != null)
+            {
+                if (piece.team != team || !(piece is T))
+                    continue;
+                else if (piece.team == team && piece is T)
+                    return piece;
+            }
+        }
+        return null;
+    }
+
     private void AssignStandardMoves()
     {
         float range = 1;
@@ -116,8 +135,26 @@ public class King : Piece
         return moveType.normal;
     }
     public string GetCastlingRights(){
-        string kingSide = !(rightRook.hasMoved || this.hasMoved)?"K":"";
-        string queenSide = !(leftRook.hasMoved || this.hasMoved)?"Q":"";
-        return kingSide + queenSide;
+        leftRook = GetPieceInDirectionUnblocked<Rook>(team, Vector2Int.left);
+        rightRook = GetPieceInDirectionUnblocked<Rook>(team, Vector2Int.right);
+        string kingSide = "";
+        string queenSide = "";
+        if(rightRook != null){
+            bool rightMoved = (rightRook.hasMoved || this.hasMoved);
+            if(!rightMoved){
+                kingSide = "K";
+            }
+        }
+        if(leftRook != null){
+            bool leftMoved = (leftRook.hasMoved || this.hasMoved);
+            if(!leftMoved){
+                queenSide = "Q";
+            }
+        }
+        string result = kingSide + queenSide;
+        if (team == TeamColor.Black){
+            result = result.ToLower();
+        }
+        return result;
     }
 }

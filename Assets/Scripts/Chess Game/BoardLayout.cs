@@ -11,7 +11,7 @@ public enum TeamColor
 
 public enum PieceType
 {
-    Pawn, Bishop, Knight, Rook, Queen, King
+    Pawn, Bishop, Knight, Rook, Queen, King, EnPassant
 }
 
 [CreateAssetMenu(menuName = "Scriptable Objects/Board/Layout")]
@@ -24,9 +24,12 @@ public class BoardLayout : ScriptableObject
         public PieceType pieceType;
         public TeamColor teamColor;
     }
-
+    [SerializeField] private bool whiteKingCastleRights;
+    [SerializeField] private bool whiteQueenCastleRights;
+    [SerializeField] private bool blackKingCastleRights;
+    [SerializeField] private bool blackQueenCastleRights;
     [SerializeField] private BoardSquareSetup[] boardSquares;
-
+    
     public int GetPiecesCount()
     {
         return boardSquares.Length;

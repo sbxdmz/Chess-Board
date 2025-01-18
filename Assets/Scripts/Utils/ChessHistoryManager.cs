@@ -64,7 +64,7 @@ public class ChessHistoryManager : MonoBehaviour
                     result += "E";
                     continue;
                 }
-                if(board[c,r].GetType().Name == "King"){
+                if(board[c,r].GetType() == typeof(King)){
                     if(board[c,r].team == TeamColor.Black){
                         blackKing = (King) board[c,r];
                     }
@@ -80,7 +80,7 @@ public class ChessHistoryManager : MonoBehaviour
             }
             result += "/";
         }
-        result += toMove.team == TeamColor.White?"w ":"b " + whiteKing.GetCastlingRights() + blackKing.GetCastlingRights();
+        result += (toMove.team == TeamColor.White?"w ":"b ") + whiteKing.GetCastlingRights() + blackKing.GetCastlingRights();
         return result;
     }
 
