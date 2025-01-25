@@ -9,20 +9,24 @@ public class ChessHistoryManager : MonoBehaviour
     public List<ChessMove> moveHistory = new List<ChessMove>();
     public TTSManager tts;
     private string PGNString;
+    public ChessGameController gameController;
     // Start is called before the first frame update
     void Start()
     {
-      
+        ChessMove newMove = new ChessMove("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        moveHistory.Add(newMove);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Z)){
+            UndoMove();
+        }
     }
     
-    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
-        ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate);
+    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate, Piece[,] board, ChessPlayer nextPlayer){
+        ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate, GetFEN(board, nextPlayer));
         moveHistory.Add(newMove);
         tts.AnnounceMove(newMove);
         PGNString = GetPGN();
@@ -36,10 +40,17 @@ public class ChessHistoryManager : MonoBehaviour
         PGNText.text = PGNString;
     }
 
+    public void UndoMove(){
+        ChessMove previousMove = moveHistory[moveHistory.Count - 2];
+        Debug.Log(previousMove);
+        gameController.StartFromFEN(previousMove.FEN);
+        moveHistory.Remove(previousMove);
+    }
+
     public string GetPGN(){
         string result = "";
         int moveCount = 0;
-        for(int i = 0; i < moveHistory.Count; i++){
+        for(int i = 1; i < moveHistory.Count; i++){
             if(i % 2 == 0){
                 moveCount += 1;
                 result += moveCount + ". ";
@@ -50,20 +61,27 @@ public class ChessHistoryManager : MonoBehaviour
         }
         return result;
     }
-//
+    
     public string GetFEN(Piece[,] board, ChessPlayer toMove){
         string result = "";
         King whiteKing = null;
         King blackKing = null;
+        int counter = 0;
+        string enPassantString = "-";
         for(int r = 7; r >= 0; r--){
             for(int c = 0; c < 8; c++){
                 if(board[c,r] == null){
-                    result += "S";
+                    counter++;
                     continue;
                 }
                 else if(board[c,r].occupiedSquare != new Vector2Int(c,r)){
-                    result += "E";
+                    enPassantString = MyUtils.getSquare(new Vector2Int(c,r));
+                    counter++;
                     continue;
+                }
+                if(counter>0){
+                    result += counter;
+                    counter = 0;
                 }
                 if(board[c,r].GetType() == typeof(King)){
                     if(board[c,r].team == TeamColor.Black){
@@ -79,12 +97,18 @@ public class ChessHistoryManager : MonoBehaviour
                 }
                 result += currentPiece;
             }
-            result += "/";
+            if(counter>0){
+                    result += counter;
+                    counter = 0;
+            }
+            if(r > 0){
+                result += "/";
+            }
         }
-        result += (toMove.team == TeamColor.White?"w ":"b ") + whiteKing.GetCastlingRights() + blackKing.GetCastlingRights();
+        result += (toMove.team == TeamColor.White?" w ":" b ") + whiteKing.GetCastlingRights() + blackKing.GetCastlingRights() + " " + enPassantString + " " + "0 0";
         return result;
     }
-
+    
 }
 
 [System.Serializable]
@@ -98,8 +122,9 @@ public class ChessMove{
     public ChessPlayer team;
     public bool causedCheck;
     public bool causedCheckmate;
+    public string FEN;
 
-    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
+    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate, string FEN){
         this.origin = origin;
         this.destination = destination;
         this.MT = MT;
@@ -108,6 +133,11 @@ public class ChessMove{
         this.team = team;
         this.causedCheck = causedCheck;
         this.causedCheckmate = causedCheckmate;
+        this.FEN = FEN;
+    }
+
+    public ChessMove(string FEN){
+        this.FEN = FEN;
     }
     public string GetAlgebraicNotation(){
         string captureString = "";
@@ -146,5 +176,7 @@ public class ChessMove{
     public string GetSentence(){
         return null;
     }
+
+
 
 }

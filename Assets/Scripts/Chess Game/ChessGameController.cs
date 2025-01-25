@@ -391,6 +391,10 @@ public class ChessGameController : MonoBehaviour
     {
         activePlayer.RemoveMovesEnablingAttackOnPieceOfType<T>(GetOpponentToPlayer(activePlayer), piece);
     }
+
+    public ChessPlayer GetOppositeOfActive(){
+        return GetOpponentToPlayer(activePlayer);
+    }
 }
 
 public enum ChessGameState{GameRunning, GameWon, GameStalemate, GameCheck}

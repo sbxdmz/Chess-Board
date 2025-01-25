@@ -157,7 +157,7 @@ public class Board : MonoBehaviour
         if (takenPiece != null){
             capturedPieceString = takenPiece.GetType().Name;
         }
-        historyManager.RecordMove(origin, coords, MT, capturedPieceString, movingPiece, chessController.activePlayer, isInCheck, isInCheckmate);
+        historyManager.RecordMove(origin, coords, MT, capturedPieceString, movingPiece, chessController.activePlayer, isInCheck, isInCheckmate, grid, chessController.GetOppositeOfActive());
         DeselectPiece();
         if(MT != moveType.promotion){
             EndTurn();

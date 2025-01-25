@@ -2877,9 +2877,9 @@ RectTransform:
   - {fileID: 323614922}
   m_Father: {fileID: 929866772}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -712.5, y: 435}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 80, y: -10}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1853732766
@@ -3379,6 +3379,7 @@ MonoBehaviour:
   PGNText: {fileID: 365300246}
   moveHistory: []
   tts: {fileID: 1909074940}
+  gameController: {fileID: 1909074935}
 --- !u!114 &1909074939
 MonoBehaviour:
   m_ObjectHideFlags: 0
