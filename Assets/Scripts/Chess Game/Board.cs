@@ -45,6 +45,17 @@ public class Board : MonoBehaviour
     {
         grid = new Piece[BOARD_SIZE, BOARD_SIZE];
     }
+    public void ResetBoard()
+    {
+        foreach(Piece p in grid)
+        {
+            if(p != null)
+            {
+                Destroy(p.gameObject);
+            }
+        }
+        grid = new Piece[BOARD_SIZE, BOARD_SIZE];
+    }
 
     public Vector3 CalculatePositionFromCoords(Vector2Int coords)
     {

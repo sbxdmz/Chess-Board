@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(PiecesCreator))]
@@ -16,6 +17,7 @@ public class ChessGameController : MonoBehaviour
     [SerializeField] private Board board;
     [SerializeField] private ChessUIManager UIManager;
     [SerializeField] private ChessHistoryManager historyManager;
+    [SerializeField] private TMP_InputField FENInput;
 
     private PiecesCreator pieceCreator;
     private ChessPlayer whitePlayer;
@@ -51,12 +53,22 @@ public class ChessGameController : MonoBehaviour
 
     private void StartNewGame()
     {
+        StartFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    }
+    public void SubmitFEN()
+    {
+        StartFromFEN(FENInput.text);
+    }
+    public void StartFromFEN(string FEN)
+    {
+        //rnbqkbnr/ppp1pppp/8/8/2Pp4/3PP3/PP3PPP/RNBQKBNR b KQkq c3 0 1
+        board.ResetBoard();
         SetGameState(GameState.Init);
         UIManager.HideUI();
         board.SetDependencies(this, historyManager);
         //CreatePiecesFromLayout(startingBoardLayout);
         activePlayer = whitePlayer;
-        CreatePiecesFromFEN("rnbqkbnr/ppp1pppp/8/8/2Pp4/3PP3/PP3PPP/RNBQKBNR b KQkq c3 0 1");
+        CreatePiecesFromFEN(FEN);
         GenerateAllPossiblePlayerMoves(activePlayer);
         SetGameState(GameState.Play);
     }
