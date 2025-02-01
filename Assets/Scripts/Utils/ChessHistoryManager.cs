@@ -44,7 +44,7 @@ public class ChessHistoryManager : MonoBehaviour
         ChessMove previousMove = moveHistory[moveHistory.Count - 2];
         Debug.Log(previousMove);
         gameController.StartFromFEN(previousMove.FEN);
-        moveHistory.Remove(previousMove);
+        moveHistory.Remove(moveHistory[moveHistory.Count-1]);
     }
 
     public string GetPGN(){
@@ -71,12 +71,14 @@ public class ChessHistoryManager : MonoBehaviour
         for(int r = 7; r >= 0; r--){
             for(int c = 0; c < 8; c++){
                 if(board[c,r] == null){
+                    Debug.Log(c + " " + r + "null" );
                     counter++;
                     continue;
                 }
                 else if(board[c,r].occupiedSquare != new Vector2Int(c,r)){
                     enPassantString = MyUtils.getSquare(new Vector2Int(c,r));
                     counter++;
+                    Debug.Log(c + " " + r + "En Passant" );
                     continue;
                 }
                 if(counter>0){

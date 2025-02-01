@@ -32,6 +32,16 @@ public class Board : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space)){
             Debug.Log(historyManager.GetFEN(grid, chessController.activePlayer));
         }
+        if(Input.GetKeyDown(KeyCode.M)){
+            string result = "";
+            for(int r = 7; r >= 0; r--){
+                for(int c = 0; c < 8; c++){
+                    result += grid[c , r] + " " + c + " " + r;
+                }
+            }
+            Debug.Log(result);
+            
+        }
     }
     public void SetDependencies(ChessGameController chessController, ChessHistoryManager historyManager)
     {

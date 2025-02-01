@@ -116,7 +116,6 @@ public class ChessGameController : MonoBehaviour
         int rank = 0;
         int file = 7;
         FENPhase currentPhase = FENPhase.BoardLayout;
-        
         for (int characterIndex = 0; characterIndex < FEN.Length; characterIndex++) 
         {
             char c = FEN[characterIndex];
@@ -153,6 +152,8 @@ public class ChessGameController : MonoBehaviour
                 TeamColor newTeam = MyUtils.GetTeamColorFromAbbreviation(c);
                 Vector2Int squareCoords = new Vector2Int(rank, file);
                 Piece createdPiece = CreatePieceAndInitialize(squareCoords, newTeam, newPieceType);
+                
+                Debug.Log(createdPiece);
                 if(newPieceType == typeof(King))
                 {
                     if(newTeam == TeamColor.White)
