@@ -14,7 +14,7 @@ public abstract class Piece : MonoBehaviour
 	public TeamColor team { get; set; }
 	public Sprite whiteSprite;
 	public Sprite blackSprite;
-	public bool hasMoved { get; private set; }
+	public bool hasMoved;
 	public List<Vector2Int> avaliableMoves;
 
 	private IObjectTweener tweener;

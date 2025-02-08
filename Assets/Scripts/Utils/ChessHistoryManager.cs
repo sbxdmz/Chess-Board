@@ -10,7 +10,9 @@ public class ChessHistoryManager : MonoBehaviour
     public TTSManager tts;
     private string PGNString;
     public ChessGameController gameController;
-    // Start is called before the first frame update
+    public GameObject undoButton;
+    private bool canUndo = true;
+     
     void Start()
     {
         ChessMove newMove = new ChessMove("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
@@ -24,7 +26,12 @@ public class ChessHistoryManager : MonoBehaviour
             UndoMove();
         }
     }
-    
+
+    public void SetUndo(bool enabled){
+        undoButton.SetActive(enabled);
+        canUndo = enabled;
+    }
+
     public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate, Piece[,] board, ChessPlayer nextPlayer){
         ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate, GetFEN(board, nextPlayer));
         moveHistory.Add(newMove);
@@ -41,6 +48,9 @@ public class ChessHistoryManager : MonoBehaviour
     }
 
     public void UndoMove(){
+        if(canUndo == false){
+            return;
+        }
         if(moveHistory.Count <= 1)
         {
             return;

@@ -183,10 +183,7 @@ public class Board : MonoBehaviour
         }
         historyManager.RecordMove(origin, coords, MT, capturedPieceString, movingPiece, chessController.activePlayer, isInCheck, isInCheckmate, grid, chessController.GetOppositeOfActive());
         DeselectPiece();
-        if(MT != moveType.promotion){
-            EndTurn();
-        }
-        
+        EndTurn();
     }
 
     private void EndTurn()
@@ -281,13 +278,14 @@ public class Board : MonoBehaviour
     private string chosenPiece = "";
     public void PromotePiece(Piece piece)
     {   
-        
+        historyManager.SetUndo(false);
         promotionScreen.SetActive(true);
         buttonParent.transform.position = CalculatePositionFromCoords(piece.occupiedSquare);
         buttonParent.GetComponent<ButtonTeam>().SwitchToTeam(piece.team);
         StartCoroutine(waitForButtonSelect());
         IEnumerator waitForButtonSelect(){
             yield return new WaitUntil(()=>chosenPiece != "");
+            historyManager.SetUndo(true);
             TakePiece(piece);
             Piece newPiece = null;
             switch(chosenPiece){
@@ -295,10 +293,17 @@ public class Board : MonoBehaviour
                 case "Knight": newPiece = chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Knight)); break;
                 case "Rook": newPiece = chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Rook)); break;
                 case "Bishop": newPiece = chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Bishop)); break;
-            }   
+                default: historyManager.UndoMove(); break;
+           }   
             chosenPiece = "";
             promotionScreen.SetActive(false);
-            historyManager.RecordPromotion(newPiece);
+            if(newPiece != null){
+
+                historyManager.RecordPromotion(newPiece);
+                chessController.ChangeActiveTeam();
+                chessController.EndTurn();
+            }
+
         } 
         
         

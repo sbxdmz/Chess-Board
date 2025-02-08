@@ -51,6 +51,9 @@ public class ChessGameController : MonoBehaviour
         StartNewGame();
     }
 
+    private void Update(){
+        
+    }
     private void StartNewGame()
     {
         UIManager.HideUI();
@@ -165,7 +168,12 @@ public class ChessGameController : MonoBehaviour
                         blackKing = (King)createdPiece;
                     }
                 }
-
+                if(newPieceType == typeof(Pawn)){
+                    Debug.Log(file);
+                    if((newTeam == TeamColor.White && file != 1) || (newTeam == TeamColor.Black && file != 6)){
+                        createdPiece.hasMoved = true;
+                    }
+                }
                 rank++;
             }
             else if (currentPhase == FENPhase.Team)
@@ -270,6 +278,11 @@ public class ChessGameController : MonoBehaviour
 
     public void EndTurn()
     {
+        EndTurn(true);
+    }
+
+    public void EndTurn(bool changeTeam)
+    {
         GenerateAllPossiblePlayerMoves(activePlayer);
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         board.ClearBoardOfPassant(GetOpponentToPlayer(activePlayer));
@@ -282,10 +295,10 @@ public class ChessGameController : MonoBehaviour
         else if(currentState == ChessGameState.GameStalemate){
             StalemateGame();
         }
-        else if(currentState == ChessGameState.GameCheck){
+        else if(changeTeam && currentState == ChessGameState.GameCheck){
             ChangeActiveTeam(); //check back
         }
-        else
+        else if(changeTeam)
         {
             ChangeActiveTeam();
         }
@@ -371,7 +384,7 @@ public class ChessGameController : MonoBehaviour
         blackPlayer.activePieces.ForEach(p => Destroy(p.gameObject));
     }
 
-    private void ChangeActiveTeam()
+    public void ChangeActiveTeam()
     {
         activePlayer = activePlayer == whitePlayer ? blackPlayer : whitePlayer;
         
