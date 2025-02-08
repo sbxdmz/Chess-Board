@@ -29,6 +29,10 @@ public class ChessPlayer
 		if (activePieces.Contains(piece))
 			activePieces.Remove(piece);
 	}
+	public void ClearPieces()
+	{
+		activePieces.Clear();
+	}
 
 	public void GenerateAllPossibleMoves()
 	{

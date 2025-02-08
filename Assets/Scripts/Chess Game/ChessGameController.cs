@@ -20,8 +20,8 @@ public class ChessGameController : MonoBehaviour
     [SerializeField] private TMP_InputField FENInput;
 
     private PiecesCreator pieceCreator;
-    private ChessPlayer whitePlayer;
-    private ChessPlayer blackPlayer;
+    public ChessPlayer whitePlayer;
+    public ChessPlayer blackPlayer;
     public ChessPlayer activePlayer;
 
     private GameState state;
@@ -53,6 +53,9 @@ public class ChessGameController : MonoBehaviour
 
     private void StartNewGame()
     {
+        UIManager.HideUI();
+        board.SetDependencies(this, historyManager);
+        SetGameState(GameState.Init);
         StartFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     }
     public void SubmitFEN()
@@ -63,12 +66,10 @@ public class ChessGameController : MonoBehaviour
     {
         //rnbqkbnr/ppp1pppp/8/8/2Pp4/3PP3/PP3PPP/RNBQKBNR b KQkq c3 0 1
         board.ResetBoard();
-        SetGameState(GameState.Init);
-        UIManager.HideUI();
-        board.SetDependencies(this, historyManager);
         //CreatePiecesFromLayout(startingBoardLayout);
         activePlayer = whitePlayer;
         CreatePiecesFromFEN(FEN);
+        GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         GenerateAllPossiblePlayerMoves(activePlayer);
         SetGameState(GameState.Play);
     }
@@ -153,7 +154,6 @@ public class ChessGameController : MonoBehaviour
                 Vector2Int squareCoords = new Vector2Int(rank, file);
                 Piece createdPiece = CreatePieceAndInitialize(squareCoords, newTeam, newPieceType);
                 
-                Debug.Log(createdPiece);
                 if(newPieceType == typeof(King))
                 {
                     if(newTeam == TeamColor.White)

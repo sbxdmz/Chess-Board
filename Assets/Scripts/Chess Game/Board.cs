@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
+using static UnityEngine.Networking.UnityWebRequest;
 
 [RequireComponent(typeof(SquareSelectorCreator))]
 public class Board : MonoBehaviour
@@ -16,6 +17,7 @@ public class Board : MonoBehaviour
     [SerializeField] private GameObject buttonParent;
 
     private Piece[,] grid;
+    public Piece[] tempPieces;
     private Piece selectedPiece;
     private ChessGameController chessController;
     private SquareSelectorCreator squareSelector;
@@ -27,6 +29,7 @@ public class Board : MonoBehaviour
         CreateGrid();
     }
     private void Start(){
+        tempPieces = new Piece[64];
     }
     private void Update(){
         if(Input.GetKeyDown(KeyCode.Space)){
@@ -40,7 +43,16 @@ public class Board : MonoBehaviour
                 }
             }
             Debug.Log(result);
-            
+
+        }
+        int counter = 0;
+        for (int r = 7; r >= 0; r--)
+        {
+            for (int c = 0; c < 8; c++)
+            {
+                tempPieces[counter] = grid[c, r];
+                counter++;
+            }
         }
     }
     public void SetDependencies(ChessGameController chessController, ChessHistoryManager historyManager)
@@ -57,6 +69,8 @@ public class Board : MonoBehaviour
     }
     public void ResetBoard()
     {
+        chessController.whitePlayer.ClearPieces();
+        chessController.blackPlayer.ClearPieces();
         foreach(Piece p in grid)
         {
             if(p != null)
