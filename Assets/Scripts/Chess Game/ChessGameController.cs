@@ -117,8 +117,8 @@ public class ChessGameController : MonoBehaviour
         King whiteKing = null;
         King blackKing = null;
 
-        int rank = 0;
-        int file = 7;
+        int file = 0;
+        int rank = 7;
         FENPhase currentPhase = FENPhase.BoardLayout;
         for (int characterIndex = 0; characterIndex < FEN.Length; characterIndex++) 
         {
@@ -140,21 +140,21 @@ public class ChessGameController : MonoBehaviour
             {
                 if (c == '/')
                 {
-                    file--;
-                    rank = 0;
+                    rank--;
+                    file = 0;
                     continue;
                 }
 
                 if (char.IsNumber(c))
                 {
                     int numberOfSpaces = (int)char.GetNumericValue(c);
-                    rank += numberOfSpaces;
+                    file += numberOfSpaces;
                     continue;
                 }
 
                 Type newPieceType = MyUtils.GetPieceTypeFromAbbreviation(c);
                 TeamColor newTeam = MyUtils.GetTeamColorFromAbbreviation(c);
-                Vector2Int squareCoords = new Vector2Int(rank, file);
+                Vector2Int squareCoords = new Vector2Int(file, rank);
                 Piece createdPiece = CreatePieceAndInitialize(squareCoords, newTeam, newPieceType);
                 
                 if(newPieceType == typeof(King))
@@ -169,12 +169,12 @@ public class ChessGameController : MonoBehaviour
                     }
                 }
                 if(newPieceType == typeof(Pawn)){
-                    Debug.Log(file);
-                    if((newTeam == TeamColor.White && file != 1) || (newTeam == TeamColor.Black && file != 6)){
+                    Debug.Log(rank);
+                    if((newTeam == TeamColor.White && rank != 1) || (newTeam == TeamColor.Black && rank != 6)){
                         createdPiece.hasMoved = true;
                     }
                 }
-                rank++;
+                file++;
             }
             else if (currentPhase == FENPhase.Team)
             {
