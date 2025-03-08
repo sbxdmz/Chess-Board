@@ -75,6 +75,7 @@ public class ChessGameController : MonoBehaviour
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         GenerateAllPossiblePlayerMoves(activePlayer);
         SetGameState(GameState.Play);
+        historyManager.displayFEN(board.grid, activePlayer);
     }
     private void SetGameState(GameState state)
     {

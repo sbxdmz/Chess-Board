@@ -16,7 +16,7 @@ public class Board : MonoBehaviour
     [SerializeField] private GameObject promotionScreen;
     [SerializeField] private GameObject buttonParent;
 
-    private Piece[,] grid;
+    public Piece[,] grid;
     public Piece[] tempPieces;
     private Piece selectedPiece;
     private ChessGameController chessController;

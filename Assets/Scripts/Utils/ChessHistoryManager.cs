@@ -9,6 +9,8 @@ public class ChessHistoryManager : MonoBehaviour
     public List<ChessMove> moveHistory = new List<ChessMove>();
     public TTSManager tts;
     private string PGNString;
+    private string FENString;
+    [SerializeField] private TMP_InputField FENInput;
     public ChessGameController gameController;
     public GameObject undoButton;
     private bool canUndo = true;
@@ -31,6 +33,11 @@ public class ChessHistoryManager : MonoBehaviour
         undoButton.SetActive(enabled);
         canUndo = enabled;
     }
+    public void displayFEN(Piece[,] board, ChessPlayer nextPlayer)
+    {
+        FENString = GetFEN(board, nextPlayer);
+        FENInput.text = FENString;
+    }
 
     public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate, Piece[,] board, ChessPlayer nextPlayer){
         ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate, GetFEN(board, nextPlayer));
@@ -38,8 +45,9 @@ public class ChessHistoryManager : MonoBehaviour
         tts.AnnounceMove(newMove);
         PGNString = GetPGN();
         PGNText.text = PGNString;
+        FENString = GetFEN(board, nextPlayer);
+        FENInput.text = FENString;
     }
-
     public void RecordPromotion(Piece promotedPiece){
         ChessMove lastMove = moveHistory[moveHistory.Count - 1];
         lastMove.promotedPiece = promotedPiece;
@@ -60,6 +68,8 @@ public class ChessHistoryManager : MonoBehaviour
         moveHistory.Remove(moveHistory[moveHistory.Count-1]);
         PGNString = GetPGN();
         PGNText.text = PGNString;
+        FENString = previousMove.FEN;
+        FENInput.text = FENString;
     }
 
     public string GetPGN(){
