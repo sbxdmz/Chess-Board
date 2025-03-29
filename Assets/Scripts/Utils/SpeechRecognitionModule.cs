@@ -1,14 +1,17 @@
 using System.IO;
+using System.Text.RegularExpressions;
 using HuggingFace.API;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SpeechRecognitionTest : MonoBehaviour
+public class SpeechRecognitionModule : MonoBehaviour
 {
+    [SerializeField] private ExternalInputHandler externalInput;
     [SerializeField] private Button startButton;
     [SerializeField] private Button stopButton;
-    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private TextMeshProUGUI sentenceText;
+    [SerializeField] private TextMeshProUGUI moveText;
 
     private AudioClip clip;
     private byte[] bytes;
@@ -31,8 +34,8 @@ public class SpeechRecognitionTest : MonoBehaviour
 
     private void StartRecording()
     {
-        text.color = Color.white;
-        text.text = "Recording...";
+        sentenceText.color = Color.white;
+        sentenceText.text = "Recording...";
         startButton.interactable = false;
         stopButton.interactable = true;
         clip = Microphone.Start(null, false, 10, 44100);
@@ -52,18 +55,39 @@ public class SpeechRecognitionTest : MonoBehaviour
 
     private void SendRecording()
     {
-        text.color = Color.yellow;
-        text.text = "Sending...";
+        sentenceText.color = Color.yellow;
+        sentenceText.text = "Sending...";
         stopButton.interactable = false;
         HuggingFaceAPI.AutomaticSpeechRecognition(bytes, response => {
-            text.color = Color.white;
-            text.text = response;
+            sentenceText.color = Color.white;
+            sentenceText.text = response;
+            ProcessMove(response);
             startButton.interactable = true;
         }, error => {
-            text.color = Color.red;
-            text.text = error;
+            sentenceText.color = Color.red;
+            //sentenceText.text = error;
+            sentenceText.text = "Connection error. Please try again.";
             startButton.interactable = true;
         });
+    }
+    void ProcessMove(string text)
+    {
+        string moveString = "";
+        var regex = new Regex(@".*([a-zA-Z]\d).*([a-zA-Z]\d).*");
+        var match = regex.Match(text);
+        if(match.Success)
+        {
+            string first = match.Groups[1].Value;
+            string second = match.Groups[2].Value;
+            string final = first + second;
+            final = final.ToLower();
+            moveText.text = "Making move: " + first + " to " + second;
+            externalInput.MakeMove(final);
+        }
+        else
+        {
+            moveText.text = "Was unable to parse command. Please try again.";
+        }
     }
 
     private byte[] EncodeAsWAV(float[] samples, int frequency, int channels)
