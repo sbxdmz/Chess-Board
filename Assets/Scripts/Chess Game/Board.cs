@@ -284,6 +284,7 @@ public class Board : MonoBehaviour
         buttonParent.GetComponent<ButtonTeam>().SwitchToTeam(piece.team);
         StartCoroutine(waitForButtonSelect());
         IEnumerator waitForButtonSelect(){
+            chosenPiece = "";
             yield return new WaitUntil(()=>chosenPiece != "");
             historyManager.SetUndo(true);
             TakePiece(piece);

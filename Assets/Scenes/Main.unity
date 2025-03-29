@@ -1776,6 +1776,7 @@ MonoBehaviour:
   stopButton: {fileID: 370840805}
   sentenceText: {fileID: 1124562255}
   moveText: {fileID: 2098282914}
+  board: {fileID: 5265858340144138424}
 --- !u!4 &238586175
 Transform:
   m_ObjectHideFlags: 0

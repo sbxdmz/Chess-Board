@@ -12,6 +12,7 @@ public class SpeechRecognitionModule : MonoBehaviour
     [SerializeField] private Button stopButton;
     [SerializeField] private TextMeshProUGUI sentenceText;
     [SerializeField] private TextMeshProUGUI moveText;
+    [SerializeField] private Board board;
 
     private AudioClip clip;
     private byte[] bytes;
@@ -22,14 +23,19 @@ public class SpeechRecognitionModule : MonoBehaviour
         startButton.onClick.AddListener(StartRecording);
         stopButton.onClick.AddListener(StopRecording);
         stopButton.interactable = false;
-
-        SendRecording();
     }
 
     private void Update()
     {
         if (recording && Microphone.GetPosition(null) >= clip.samples)
         {
+            StopRecording();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space)){
+            StartRecording();
+        }
+        if(Input.GetKeyUp(KeyCode.Space)){
             StopRecording();
         }
     }
@@ -88,7 +94,26 @@ public class SpeechRecognitionModule : MonoBehaviour
         }
         else
         {
+            if(text.ToLower().Contains("queen")){
+                moveText.text = "Promoting to a Queen";
+                board.ChoosePromotionPiece("Queen"); 
+            }
+            else if(text.ToLower().Contains("rook")){
+                
+                moveText.text = "Promoting to a Rook";
+                board.ChoosePromotionPiece("Rook"); 
+            }
+            else if(text.ToLower().Contains("bishop")){
+                moveText.text = "Promoting to a Bishop";
+                board.ChoosePromotionPiece("Bishop"); 
+            }
+            else if(text.ToLower().Contains("knight") || text.ToLower().Contains("night") ){
+                moveText.text = "Promoting to a Knight";
+                board.ChoosePromotionPiece("Knight"); 
+            }
+            else{
             moveText.text = "Was unable to parse command. Please try again.";
+            }
         }
     }
 
