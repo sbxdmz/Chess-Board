@@ -5,7 +5,10 @@ using UnityEngine;
 public class RotateCamera : MonoBehaviour
 {
     public bool whiteSide = true;
+    public GameObject whiteSideLabels;
+    public GameObject blackSideLabels;
     float velocity = 0;
+
     void Start()
     {
         
@@ -20,6 +23,8 @@ public class RotateCamera : MonoBehaviour
     
     public void ToggleSide(){
         whiteSide = !whiteSide;
+        whiteSideLabels.SetActive(whiteSide);
+        blackSideLabels.SetActive(!whiteSide);
     }
 
 
