@@ -102,6 +102,7 @@ MonoBehaviour:
   materialSetter: {fileID: 0}
   whiteSprite: {fileID: 21300000, guid: 6ec859f9cb0d67243a431af7cef1e6c6, type: 3}
   blackSprite: {fileID: 21300000, guid: 7f008e08e24461d49a307032b257190e, type: 3}
+  hasMoved: 0
   avaliableMoves: []
 --- !u!114 &1940859637932091819
 MonoBehaviour:
@@ -138,6 +139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8494916585910948645}
   - component: {fileID: 4683484000806526742}
+  - component: {fileID: 1783671068485888640}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -212,3 +214,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1783671068485888640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9081703256218250431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a415fb4319b4f04daa074031c161102, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

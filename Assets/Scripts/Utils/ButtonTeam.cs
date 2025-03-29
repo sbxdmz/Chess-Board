@@ -10,6 +10,12 @@ public class ButtonTeam : MonoBehaviour
     public Image[] renderers;
 
     public void SwitchToTeam(TeamColor team){
+        if (team == TeamColor.Black){
+            transform.localEulerAngles = new Vector3(0, 0, 180);
+        }
+        else{
+            transform.localEulerAngles = new Vector3(0, 0, 0);
+        }
         for(int i = 0; i < renderers.Length; i++){
             if(team == TeamColor.White){
                 renderers[i].sprite = whiteSprites[i]; 

@@ -22,6 +22,8 @@ public class SpeechRecognitionModule : MonoBehaviour
         startButton.onClick.AddListener(StartRecording);
         stopButton.onClick.AddListener(StopRecording);
         stopButton.interactable = false;
+
+        SendRecording();
     }
 
     private void Update()
