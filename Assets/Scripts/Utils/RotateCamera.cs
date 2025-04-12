@@ -16,6 +16,9 @@ public class RotateCamera : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Tab)){
+            ToggleSide();
+        }
         float targetAngle = whiteSide ? 0 : 180;
         float camRotation = Camera.main.transform.localEulerAngles.y;
         Camera.main.transform.localEulerAngles = new Vector3(90, Mathf.SmoothDamp(camRotation, targetAngle, ref velocity, 0.1f), 0);

@@ -13,7 +13,7 @@ public class SpeechRecognitionModule : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sentenceText;
     [SerializeField] private TextMeshProUGUI moveText;
     [SerializeField] private Board board;
-
+    [SerializeField] private ChessHistoryManager historyManager;
     private AudioClip clip;
     private byte[] bytes;
     private bool recording;
@@ -110,6 +110,14 @@ public class SpeechRecognitionModule : MonoBehaviour
             else if(text.ToLower().Contains("knight") || text.ToLower().Contains("night") ){
                 moveText.text = "Promoting to a Knight";
                 board.ChoosePromotionPiece("Knight"); 
+            }
+            else if(text.ToLower().Contains("undo")){
+                moveText.text = "Undoing move";
+                historyManager.UndoMove();
+            }
+            else if(text.ToLower().Contains("cancel")){
+                moveText.text = "Cancelling promotion";
+                board.ChoosePromotionPiece("Cancel");
             }
             else{
             moveText.text = "Was unable to parse command. Please try again.";
