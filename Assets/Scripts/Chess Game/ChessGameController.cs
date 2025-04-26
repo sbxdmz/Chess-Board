@@ -54,6 +54,10 @@ public class ChessGameController : MonoBehaviour
     private void Update(){
         
     }
+
+    public void QuitGame(){
+        Application.Quit();
+    }
     private void StartNewGame()
     {
         UIManager.HideUI();
