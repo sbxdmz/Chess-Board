@@ -80,7 +80,6 @@ public class SpeechRecognitionModule : MonoBehaviour
     }
     void ProcessMove(string text)
     {
-        string moveString = "";
         var regex = new Regex(@".*([a-zA-Z]\d).*([a-zA-Z]\d).*");
         var match = regex.Match(text);
         if(match.Success)

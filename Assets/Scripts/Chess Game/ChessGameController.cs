@@ -79,7 +79,12 @@ public class ChessGameController : MonoBehaviour
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         GenerateAllPossiblePlayerMoves(activePlayer);
         SetGameState(GameState.Play);
+        historyManager.ResetPGN(activePlayer == blackPlayer);
+        ChessMove newMove = new ChessMove(FEN, activePlayer);
+        historyManager.moveHistory.Add(newMove);
         historyManager.displayFEN(board.grid, activePlayer);
+        
+
     }
     private void SetGameState(GameState state)
     {
@@ -116,9 +121,7 @@ public class ChessGameController : MonoBehaviour
         FullmoveNumber
     }
     private void CreatePiecesFromFEN(string FEN)
-    {
-        TeamColor nextToPlay = (TeamColor)(-1);
-        
+    {   
         King whiteKing = null;
         King blackKing = null;
 

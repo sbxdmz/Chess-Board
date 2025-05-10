@@ -17,8 +17,7 @@ public class ChessHistoryManager : MonoBehaviour
      
     void Start()
     {
-        ChessMove newMove = new ChessMove("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-        moveHistory.Add(newMove);
+
     }
 
     // Update is called once per frame
@@ -75,8 +74,19 @@ public class ChessHistoryManager : MonoBehaviour
     public string GetPGN(){
         string result = "";
         int moveCount = 0;
+        int startingValue = 1;
+        Debug.Log("1");
+        Debug.Log(moveHistory[0]);
+        Debug.Log("2");
+        Debug.Log(moveHistory[0].team);
+        Debug.Log("3");
+        Debug.Log(moveHistory[0].team.team);
+        if(moveHistory[0].team.team == TeamColor.Black){
+            startingValue = 0;
+            moveCount += 1;
+        }
         for(int i = 1; i < moveHistory.Count; i++){
-            if(i % 2 == 1){
+            if(i % 2 == startingValue){
                 moveCount += 1;
                 result += moveCount + ". ";
             }
@@ -87,6 +97,17 @@ public class ChessHistoryManager : MonoBehaviour
         return result;
     }
     
+    public void ResetPGN(bool isBlack){
+        PGNString = "";
+        PGNText.text = "";
+        moveHistory.Clear();
+        if(isBlack){
+        //     moveCount = 1;
+        // }
+        // else{
+        //     moveHistory.count = 0;
+        }
+    }
     public string GetFEN(Piece[,] board, ChessPlayer toMove){
         string result = "";
         King whiteKing = null;
@@ -161,8 +182,9 @@ public class ChessMove{
         this.FEN = FEN;
     }
 
-    public ChessMove(string FEN){
+    public ChessMove(string FEN, ChessPlayer team){
         this.FEN = FEN;
+        this.team = team;
     }
     public string GetAlgebraicNotation(){
         string captureString = "";
