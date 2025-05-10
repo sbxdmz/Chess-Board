@@ -18,6 +18,9 @@ public class ChessPlayer
 		this.team = team;
 	}
 
+	// public void getAllTargeting(pieceType type, Vector2Int square){
+
+	// }
 	public void AddPiece(Piece piece)
 	{
 		if (!activePieces.Contains(piece))

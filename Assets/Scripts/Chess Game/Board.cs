@@ -170,6 +170,9 @@ public class Board : MonoBehaviour
     }
     private void OnSelectedPieceMoved(Vector2Int coords, Piece piece)
     {
+        bool ambiguousCol = false;
+        bool ambiguousRow = false;
+        // List<Piece> otherPiecesOfSameType = 
         Vector2Int origin = piece.occupiedSquare;
         Piece takenPiece = TryToTakeOppositePiece(coords);
         Piece movingPiece = piece;

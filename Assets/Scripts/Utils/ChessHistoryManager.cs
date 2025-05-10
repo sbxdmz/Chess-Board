@@ -39,7 +39,7 @@ public class ChessHistoryManager : MonoBehaviour
     }
 
     public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate, Piece[,] board, ChessPlayer nextPlayer){
-        ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate, GetFEN(board, nextPlayer));
+        ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate, GetFEN(board, nextPlayer), false, false);
         moveHistory.Add(newMove);
         tts.AnnounceMove(newMove);
         PGNString = GetPGN();
@@ -75,12 +75,6 @@ public class ChessHistoryManager : MonoBehaviour
         string result = "";
         int moveCount = 0;
         int startingValue = 1;
-        Debug.Log("1");
-        Debug.Log(moveHistory[0]);
-        Debug.Log("2");
-        Debug.Log(moveHistory[0].team);
-        Debug.Log("3");
-        Debug.Log(moveHistory[0].team.team);
         if(moveHistory[0].team.team == TeamColor.Black){
             startingValue = 0;
             moveCount += 1;
@@ -169,8 +163,10 @@ public class ChessMove{
     public bool causedCheck;
     public bool causedCheckmate;
     public string FEN;
+    public bool ambiguousRow;
+    public bool ambiguousCol;
 
-    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate, string FEN){
+    public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate, string FEN, bool ambiguousRow, bool ambiguousCol){
         this.origin = origin;
         this.destination = destination;
         this.MT = MT;
@@ -180,6 +176,8 @@ public class ChessMove{
         this.causedCheck = causedCheck;
         this.causedCheckmate = causedCheckmate;
         this.FEN = FEN;
+        this.ambiguousRow = ambiguousRow;
+        this.ambiguousCol = ambiguousCol;
     }
 
     public ChessMove(string FEN, ChessPlayer team){
@@ -192,6 +190,8 @@ public class ChessMove{
         string originString = "";
         string originSquare = MyUtils.getSquare(origin);
         string promotionString = "";
+        string disambiguationString = "";
+
         if(promotedPiece != null){
             promotionString += "=" + MyUtils.getPieceAbbr(promotedPiece);
         }
@@ -202,6 +202,14 @@ public class ChessMove{
             captureString = "x";
 
         }
+        if(ambiguousCol){
+            string o = MyUtils.getSquare(origin);
+            disambiguationString += o.Substring(0,1);
+        }
+        if(ambiguousRow){
+            string o = MyUtils.getSquare(origin);
+            disambiguationString += o.Substring(1,1);
+        }
         if(causedCheckmate){
             checkString = "#";
         }
@@ -210,7 +218,7 @@ public class ChessMove{
         }
 
         if(MT == moveType.normal){
-        return originString + MyUtils.getPieceAbbr(movingPiece) + captureString + MyUtils.getSquare(destination) + promotionString + checkString;
+            return originString + MyUtils.getPieceAbbr(movingPiece) + disambiguationString + captureString + MyUtils.getSquare(destination) + promotionString + checkString;
         }
         else if(MT == moveType.shortCastle){
             return "O-O" + checkString;
