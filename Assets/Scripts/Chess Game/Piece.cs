@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(MaterialSetter))]
-[RequireComponent(typeof(IObjectTweener))]
+// [RequireComponent(typeof(IObjectTweener))]
 public abstract class Piece : MonoBehaviour
 {
 	[SerializeField] private MaterialSetter materialSetter;
@@ -17,14 +17,17 @@ public abstract class Piece : MonoBehaviour
 	public bool hasMoved;
 	public List<Vector2Int> avaliableMoves;
 
-	private IObjectTweener tweener;
+	// private IObjectTweener tweener;
+	private PieceMover pm;
 
 	public abstract List<Vector2Int> SelectAvailableSquares();
 
 	private void Awake()
 	{
 		avaliableMoves = new List<Vector2Int>();
-		tweener = GetComponent<IObjectTweener>();
+		// tweener = GetComponent<IObjectTweener>();
+		pm = GetComponent<PieceMover>();
+		// pm.SetTargetPosition(transform.position);
 		materialSetter = GetComponent<MaterialSetter>();
 		hasMoved = false;
 	}
@@ -56,8 +59,8 @@ public abstract class Piece : MonoBehaviour
 		Vector3 targetPosition = board.CalculatePositionFromCoords(coords);
 		occupiedSquare = coords;
 		hasMoved = true;
-		tweener.MoveTo(transform, targetPosition);
-
+		// tweener.MoveTo(transform, targetPosition);
+		pm.SetTargetPosition(targetPosition); 
 		return moveType.normal;
 	}
 
