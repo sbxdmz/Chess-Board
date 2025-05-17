@@ -18,9 +18,19 @@ public class ChessPlayer
 		this.team = team;
 	}
 
-	// public void getAllTargeting(pieceType type, Vector2Int square){
 
-	// }
+	public List<Piece> GetAllTargeting(Vector2Int coords)
+	{
+		List<Piece> result = new List<Piece>();
+		foreach (var piece in activePieces)
+		{
+			if (board.HasPiece(piece) && piece.CanMoveToSquare(coords)){
+				result.Add(piece);
+			}
+		}
+		return result;
+	}
+
 	public void AddPiece(Piece piece)
 	{
 		if (!activePieces.Contains(piece))

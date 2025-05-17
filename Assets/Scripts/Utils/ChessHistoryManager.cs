@@ -38,8 +38,8 @@ public class ChessHistoryManager : MonoBehaviour
         FENInput.text = FENString;
     }
 
-    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate, Piece[,] board, ChessPlayer nextPlayer){
-        ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate, GetFEN(board, nextPlayer), false, false);
+    public void RecordMove(Vector2Int origin, Vector2Int destination, moveType MT, string capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate, Piece[,] board, ChessPlayer nextPlayer, bool ambiguousRow, bool ambiguousCol){
+        ChessMove newMove = new ChessMove(origin, destination, MT, capturedPiece, movingPiece, team, causedCheck, causedCheckmate, GetFEN(board, nextPlayer), ambiguousRow, ambiguousCol);
         moveHistory.Add(newMove);
         tts.AnnounceMove(newMove);
         PGNString = GetPGN();
@@ -209,6 +209,9 @@ public class ChessMove{
         if(ambiguousRow){
             string o = MyUtils.getSquare(origin);
             disambiguationString += o.Substring(1,1);
+        }
+        if(movingPiece.GetType().Name == "Pawn"){
+            disambiguationString = "";
         }
         if(causedCheckmate){
             checkString = "#";

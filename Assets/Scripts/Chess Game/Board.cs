@@ -172,7 +172,20 @@ public class Board : MonoBehaviour
     {
         bool ambiguousCol = false;
         bool ambiguousRow = false;
-        // List<Piece> otherPiecesOfSameType = 
+        List<Piece> piecesAttackingSameSquare = chessController.activePlayer.GetAllTargeting(coords);
+        foreach(Piece thisPiece in piecesAttackingSameSquare){
+            if(thisPiece == piece){
+                continue;
+            }
+            if(thisPiece.GetType().Equals(piece.GetType())){
+                if(thisPiece.occupiedSquare.x == piece.occupiedSquare.x){
+                    ambiguousRow = true;
+                }
+                if(thisPiece.occupiedSquare.y == piece.occupiedSquare.y){
+                    ambiguousCol = true;
+                }
+            }
+        }
         Vector2Int origin = piece.occupiedSquare;
         Piece takenPiece = TryToTakeOppositePiece(coords);
         Piece movingPiece = piece;
@@ -184,7 +197,7 @@ public class Board : MonoBehaviour
         if (takenPiece != null){
             capturedPieceString = takenPiece.GetType().Name;
         }
-        historyManager.RecordMove(origin, coords, MT, capturedPieceString, movingPiece, chessController.activePlayer, isInCheck, isInCheckmate, grid, chessController.GetOppositeOfActive());
+        historyManager.RecordMove(origin, coords, MT, capturedPieceString, movingPiece, chessController.activePlayer, isInCheck, isInCheckmate, grid, chessController.GetOppositeOfActive(), ambiguousRow, ambiguousCol);
         DeselectPiece();
         EndTurn();
     }

@@ -177,7 +177,6 @@ public class ChessGameController : MonoBehaviour
                     }
                 }
                 if(newPieceType == typeof(Pawn)){
-                    Debug.Log(rank);
                     if((newTeam == TeamColor.White && rank != 1) || (newTeam == TeamColor.Black && rank != 6)){
                         createdPiece.hasMoved = true;
                     }

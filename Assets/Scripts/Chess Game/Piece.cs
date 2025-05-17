@@ -85,6 +85,9 @@ public abstract class Piece : MonoBehaviour
 		return false;
 	}
 
+	public bool CanMoveToSquare(Vector2Int coordinates){
+		return avaliableMoves.Contains(coordinates);
+	}
 }
 public enum moveType{
 	normal, shortCastle, longCastle, promotion
