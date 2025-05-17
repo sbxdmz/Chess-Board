@@ -79,6 +79,8 @@ public class ChessGameController : MonoBehaviour
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
         GenerateAllPossiblePlayerMoves(activePlayer);
         SetGameState(GameState.Play);
+        EndTurn(true);
+        EndTurn(true);
         historyManager.ResetPGN(activePlayer == blackPlayer);
         ChessMove newMove = new ChessMove(FEN, activePlayer);
         historyManager.moveHistory.Add(newMove);
