@@ -14,7 +14,7 @@ public class ChessHistoryManager : MonoBehaviour
     public ChessGameController gameController;
     public GameObject undoButton;
     private bool canUndo = true;
-     
+
     void Start()
     {
 
@@ -46,6 +46,7 @@ public class ChessHistoryManager : MonoBehaviour
         PGNText.text = PGNString;
         FENString = GetFEN(board, nextPlayer);
         FENInput.text = FENString;
+
     }
     public void RecordPromotion(Piece promotedPiece){
         ChessMove lastMove = moveHistory[moveHistory.Count - 1];
@@ -145,7 +146,9 @@ public class ChessHistoryManager : MonoBehaviour
                 result += "/";
             }
         }
-        result += (toMove.team == TeamColor.White?" w ":" b ") + whiteKing.GetCastlingRights() + blackKing.GetCastlingRights() + " " + enPassantString + " " + "0 0";
+        int fullMove = gameController.fullMoveClock;
+        int halfMove = gameController.halfMoveClock;
+        result += (toMove.team == TeamColor.White?" w ":" b ") + whiteKing.GetCastlingRights() + blackKing.GetCastlingRights() + " " + enPassantString + " " + halfMove + " " + fullMove;
         return result;
     }
     

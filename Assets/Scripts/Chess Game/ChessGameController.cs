@@ -26,6 +26,8 @@ public class ChessGameController : MonoBehaviour
 
     private GameState state;
     
+    public int halfMoveClock = 0;
+    public int fullMoveClock = 1;
 
     public List<Vector2Int> test1;
     public List<Vector2Int> test2;
@@ -71,9 +73,7 @@ public class ChessGameController : MonoBehaviour
     }
     public void StartFromFEN(string FEN)
     {
-        //rnbqkbnr/ppp1pppp/8/8/2Pp4/3PP3/PP3PPP/RNBQKBNR b KQkq c3 0 1
         board.ResetBoard();
-        //CreatePiecesFromLayout(startingBoardLayout);
         activePlayer = whitePlayer;
         CreatePiecesFromFEN(FEN);
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
@@ -130,6 +130,9 @@ public class ChessGameController : MonoBehaviour
         int file = 0;
         int rank = 7;
         FENPhase currentPhase = FENPhase.BoardLayout;
+
+        string halfMoveString = "";
+        string fullMoveString = "";
         for (int characterIndex = 0; characterIndex < FEN.Length; characterIndex++) 
         {
             char c = FEN[characterIndex];
@@ -228,15 +231,20 @@ public class ChessGameController : MonoBehaviour
             }
             else if (currentPhase == FENPhase.HalfmoveClock)
             {
-
+                if(char.IsNumber(c)){
+                    halfMoveString += c;
+                }
             }
             else if (currentPhase == FENPhase.FullmoveNumber)
             {
-
+                if(char.IsNumber(c)){
+                    fullMoveString += c;
+                }
             }
-
-
         }
+        halfMoveClock = int.Parse(halfMoveString);
+        fullMoveClock = int.Parse(fullMoveString);
+        Debug.Log(halfMoveClock + " " + fullMoveClock);
     }
 
     public Piece CreatePieceAndInitialize(Vector2Int squareCoords, TeamColor team, Type type)

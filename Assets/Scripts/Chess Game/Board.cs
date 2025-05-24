@@ -169,7 +169,11 @@ public class Board : MonoBehaviour
         squareSelector.ClearSelection();
     }
     private void OnSelectedPieceMoved(Vector2Int coords, Piece piece)
-    {
+    {   
+        if(chessController.activePlayer.team == TeamColor.Black){
+            chessController.fullMoveClock += 1;
+        }
+        chessController.halfMoveClock += 1;
         bool ambiguousCol = false;
         bool ambiguousRow = false;
         List<Piece> piecesAttackingSameSquare = chessController.activePlayer.GetAllTargeting(coords);
@@ -188,6 +192,9 @@ public class Board : MonoBehaviour
         }
         Vector2Int origin = piece.occupiedSquare;
         Piece takenPiece = TryToTakeOppositePiece(coords);
+        if(takenPiece != null || piece.GetType() == typeof(Pawn)){
+            chessController.halfMoveClock = 0;
+        }
         Piece movingPiece = piece;
         UpdateBoardOnPieceMove(coords, piece.occupiedSquare, piece, null);
         moveType MT = selectedPiece.MovePiece(coords);
