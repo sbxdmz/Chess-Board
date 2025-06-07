@@ -66,10 +66,15 @@ public class ChessGameController : MonoBehaviour
         board.SetDependencies(this, historyManager);
         SetGameState(GameState.Init);
         StartFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        ChessMove newMove = new ChessMove("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", activePlayer);
+        historyManager.moveHistory.Add(newMove);
     }
     public void SubmitFEN()
     {
         StartFromFEN(FENInput.text);
+        historyManager.ResetPGN(activePlayer == blackPlayer);
+        ChessMove newMove = new ChessMove(FENInput.text, activePlayer);
+        historyManager.moveHistory.Add(newMove);
     }
     public void StartFromFEN(string FEN)
     {
@@ -81,9 +86,7 @@ public class ChessGameController : MonoBehaviour
         SetGameState(GameState.Play);
         EndTurn(true);
         EndTurn(true);
-        historyManager.ResetPGN(activePlayer == blackPlayer);
-        ChessMove newMove = new ChessMove(FEN, activePlayer);
-        historyManager.moveHistory.Add(newMove);
+        
         historyManager.displayFEN(board.grid, activePlayer);
         
 

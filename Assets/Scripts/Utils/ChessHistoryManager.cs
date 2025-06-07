@@ -56,6 +56,7 @@ public class ChessHistoryManager : MonoBehaviour
     }
 
     public void UndoMove(){
+        Debug.Log(moveHistory.Count);
         if(canUndo == false){
             return;
         }

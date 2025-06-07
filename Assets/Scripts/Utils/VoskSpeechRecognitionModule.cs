@@ -13,10 +13,26 @@ public class VoskSpeechRecognitionModule : MonoBehaviour
     [SerializeField] private Board board;
     [SerializeField] private ChessHistoryManager historyManager;
     public VoskSpeechToText VoskSpeechToText;
+    
+    public void ToggleRecording(){
+        VoskSpeechToText.ToggleRecording();
+        if(VoskSpeechToText.Running){
+            startButton.interactable = false;
+            stopButton.interactable = true; 
+        }
+        else{
+            startButton.interactable = true;
+            stopButton.interactable = false; 
+        }
+    }
 
     void Awake()
     {
+        startButton.interactable = true;
+        stopButton.interactable = false; 
         VoskSpeechToText.OnTranscriptionResult += OnTranscriptionResult;
+        startButton.onClick.AddListener(ToggleRecording);
+        stopButton.onClick.AddListener(ToggleRecording);
     }
 
     private void OnTranscriptionResult(string obj)
@@ -38,16 +54,18 @@ public class VoskSpeechRecognitionModule : MonoBehaviour
 
     void ProcessMove(string text)
     {
-        string numbers = "\b(one|two|three|four|five|six|seven|eight)\b";
-        var regex = new Regex(@".*([a-zA-Z] " + numbers + ").*([a-zA-Z] " + numbers + ").*");
+        Debug.Log(text);
+        var regex = new Regex(@".*(^|\s)(([a-zA-Z]) (one|two|three|four|five|six|seven|eight)).*(^|\s)(([a-zA-Z]) (one|two|three|four|five|six|seven|eight)).*");
         var match = regex.Match(text);
         if(match.Success)
         {
-            string first = match.Groups[1].Value;
-            string second = match.Groups[2].Value;
-            string final = first + second;
+            string firstLetter = match.Groups[3].Value;
+            string firstNumber = MyUtils.GetNumberFromWord(match.Groups[4].Value);
+            string secondLetter = match.Groups[7].Value;
+            string secondNumber = MyUtils.GetNumberFromWord(match.Groups[8].Value);
+            string final = firstLetter + firstNumber + secondLetter + secondNumber;
             final = final.ToLower();
-            moveText.text = "Making move: " + first + " to " + second;
+            moveText.text = "Making move: " + firstLetter + firstNumber + " to " + secondLetter + secondNumber;
             externalInput.MakeMove(final);
         }
         else

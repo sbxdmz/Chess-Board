@@ -71,6 +71,11 @@ public class VoskSpeechToText : MonoBehaviour
 	// Flag to signal we are ending
 	private bool _running;
 
+	public bool Running{
+		get{
+			return _running;
+		}
+	}
 	//Thread safe queue of microphone data.
 	private readonly ConcurrentQueue<short[]> _threadedBufferQueue = new ConcurrentQueue<short[]>();
 
@@ -149,7 +154,7 @@ public class VoskSpeechToText : MonoBehaviour
 		_isInitializing = false;
 		_didInit = true;
 
-		ToggleRecording();
+		// ToggleRecording();
 	}
 
 	//Translates the KeyPhraseses into a json array and appends the `[unk]` keyword at the end to tell vosk to filter other phrases.

@@ -2097,7 +2097,36 @@ MonoBehaviour:
   MaxAlternatives: 3
   MaxRecordLength: 5
   AutoStart: 1
-  KeyPhrases: []
+  KeyPhrases:
+  - knight
+  - night
+  - bishop
+  - king
+  - queen
+  - pawn
+  - rook
+  - a
+  - b
+  - c
+  - d
+  - e
+  - f
+  - g
+  - h
+  - one
+  - two
+  - three
+  - four
+  - five
+  - six
+  - seven
+  - eight
+  - promote
+  - undo
+  - takes
+  - take
+  - capture
+  - captures
 --- !u!114 &238586178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2110,14 +2139,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b55c87a2570a1cf48816abe74430ac44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  externalInput: {fileID: 0}
-  startButton: {fileID: 0}
-  stopButton: {fileID: 0}
-  sentenceText: {fileID: 0}
-  moveText: {fileID: 0}
-  board: {fileID: 0}
-  historyManager: {fileID: 0}
-  VoskSpeechToText: {fileID: 0}
+  externalInput: {fileID: 1909074939}
+  startButton: {fileID: 619986346}
+  stopButton: {fileID: 370840805}
+  sentenceText: {fileID: 1124562255}
+  moveText: {fileID: 2098282914}
+  board: {fileID: 5265858340144138424}
+  historyManager: {fileID: 1909074938}
+  VoskSpeechToText: {fileID: 238586177}
 --- !u!1 &309696326
 GameObject:
   m_ObjectHideFlags: 0
@@ -6589,7 +6618,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00018310547, y: 0.000061035156}
+  m_AnchoredPosition: {x: -0.00012207031, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1059663459
@@ -9754,7 +9783,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00018310547, y: 0.000061035156}
+  m_AnchoredPosition: {x: -0.00012207031, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1606600792
