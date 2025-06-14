@@ -24,4 +24,8 @@ public class ChessUIManager : MonoBehaviour
 		UIParent.SetActive(true);
 		finishText.text = "Stalemate";
 	}
+	internal void OnGameDraw(){
+		UIParent.SetActive(true);
+		finishText.text = "Draw";
+	}
 }

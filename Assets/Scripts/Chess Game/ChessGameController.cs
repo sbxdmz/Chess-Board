@@ -316,6 +316,9 @@ public class ChessGameController : MonoBehaviour
         else if(currentState == ChessGameState.GameStalemate){
             StalemateGame();
         }
+        else if(halfMoveClock >= 50){
+            DrawGame();
+        }
         else if(changeTeam && currentState == ChessGameState.GameCheck){
             ChangeActiveTeam(); //check back
         }
@@ -389,6 +392,11 @@ public class ChessGameController : MonoBehaviour
     private void StalemateGame(){
         SetGameState(GameState.Finished);
         UIManager.OnGameStalemate();
+    }
+
+    private void DrawGame(){
+        SetGameState(GameState.Finished);
+        UIManager.OnGameDraw();
     }
     public void RestartGame()
     {
