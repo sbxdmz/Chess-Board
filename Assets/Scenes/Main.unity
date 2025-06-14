@@ -3520,7 +3520,7 @@ GameObject:
   - component: {fileID: 479360142}
   - component: {fileID: 479360143}
   m_Layer: 5
-  m_Name: Draw Toggle
+  m_Name: 50 Move Toggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7000,8 +7000,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1057812597
 GameObject:
@@ -10542,8 +10542,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1606600792
 MonoBehaviour:
@@ -12117,6 +12117,7 @@ MonoBehaviour:
   historyManager: {fileID: 1909074938}
   FENInput: {fileID: 1103638463}
   landingSceneName: Landing
+  fiftyMoveToggle: {fileID: 479360143}
   halfMoveClock: 0
   fullMoveClock: 1
   test1: []

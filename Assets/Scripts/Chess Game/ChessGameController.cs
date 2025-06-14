@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(PiecesCreator))]
 public class ChessGameController : MonoBehaviour
@@ -20,6 +21,8 @@ public class ChessGameController : MonoBehaviour
     [SerializeField] private ChessHistoryManager historyManager;
     [SerializeField] private TMP_InputField FENInput;
     [SerializeField] private string landingSceneName;
+    [SerializeField] private Toggle fiftyMoveToggle;
+
     private PiecesCreator pieceCreator;
     public ChessPlayer whitePlayer;
     public ChessPlayer blackPlayer;
@@ -316,7 +319,7 @@ public class ChessGameController : MonoBehaviour
         else if(currentState == ChessGameState.GameStalemate){
             StalemateGame();
         }
-        else if(halfMoveClock >= 50){
+        else if(halfMoveClock >= 50 && fiftyMoveToggle.isOn){
             DrawGame();
         }
         else if(changeTeam && currentState == ChessGameState.GameCheck){
@@ -400,11 +403,12 @@ public class ChessGameController : MonoBehaviour
     }
     public void RestartGame()
     {
-        DestroyPieces();
-        board.OnGameRestarted();
-        whitePlayer.OnGameRestarted();
-        blackPlayer.OnGameRestarted();
-        StartNewGame();
+        // DestroyPieces();
+        // board.OnGameRestarted();
+        // whitePlayer.OnGameRestarted();
+        // blackPlayer.OnGameRestarted();
+        // StartNewGame();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void DestroyPieces()
