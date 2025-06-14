@@ -11357,6 +11357,7 @@ MonoBehaviour:
   UIManager: {fileID: 1263572175}
   historyManager: {fileID: 1909074938}
   FENInput: {fileID: 1103638463}
+  landingSceneName: Landing
   halfMoveClock: 0
   fullMoveClock: 1
   test1: []

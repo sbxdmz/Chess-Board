@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PiecesCreator))]
 public class ChessGameController : MonoBehaviour
@@ -18,7 +19,7 @@ public class ChessGameController : MonoBehaviour
     [SerializeField] private ChessUIManager UIManager;
     [SerializeField] private ChessHistoryManager historyManager;
     [SerializeField] private TMP_InputField FENInput;
-
+    [SerializeField] private string landingSceneName;
     private PiecesCreator pieceCreator;
     public ChessPlayer whitePlayer;
     public ChessPlayer blackPlayer;
@@ -58,7 +59,7 @@ public class ChessGameController : MonoBehaviour
     }
 
     public void QuitGame(){
-        Application.Quit();
+        SceneManager.LoadScene(landingSceneName);
     }
     private void StartNewGame()
     {
