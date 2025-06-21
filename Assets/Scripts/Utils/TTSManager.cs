@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class TTSManager : MonoBehaviour
 {
-    [SerializeField] Toggle TTSToggle;
     SpVoice voice = new SpVoice();
     void Start()
     {
@@ -20,7 +19,7 @@ public class TTSManager : MonoBehaviour
     }
     // public ChessMove(Vector2Int origin, Vector2Int destination, moveType MT, Piece capturedPiece, Piece movingPiece, ChessPlayer team, bool causedCheck, bool causedCheckmate){
     public void AnnounceMove(ChessMove move){
-        if(!TTSToggle.isOn) { return; }
+        if(!SettingsManager.main.textToSpeechEnabled) { return; }
         string speechString = "";
         if(move.MT == moveType.longCastle){
             speechString = "Long Castle";

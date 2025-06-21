@@ -15,6 +15,9 @@ public class Board : MonoBehaviour
     [SerializeField] private float squareSize;
     [SerializeField] private GameObject promotionScreen;
     [SerializeField] private GameObject buttonParent;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip moveClip;
+    [SerializeField] private AudioClip captureClip;
 
     public Piece[,] grid;
     public Piece[] tempPieces;
@@ -203,7 +206,12 @@ public class Board : MonoBehaviour
         string capturedPieceString = "";
         if (takenPiece != null){
             capturedPieceString = takenPiece.GetType().Name;
+            audioSource.clip = captureClip;
         }
+        else{
+            audioSource.clip = moveClip;
+        }
+        audioSource.Play();
         historyManager.RecordMove(origin, coords, MT, capturedPieceString, movingPiece, chessController.activePlayer, isInCheck, isInCheckmate, grid, chessController.GetOppositeOfActive(), ambiguousRow, ambiguousCol);
         DeselectPiece();
         EndTurn();

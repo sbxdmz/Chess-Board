@@ -21,7 +21,6 @@ public class ChessGameController : MonoBehaviour
     [SerializeField] private ChessHistoryManager historyManager;
     [SerializeField] private TMP_InputField FENInput;
     [SerializeField] private string landingSceneName;
-    [SerializeField] private Toggle fiftyMoveToggle;
 
     private PiecesCreator pieceCreator;
     public ChessPlayer whitePlayer;
@@ -319,7 +318,7 @@ public class ChessGameController : MonoBehaviour
         else if(currentState == ChessGameState.GameStalemate){
             StalemateGame();
         }
-        else if(halfMoveClock >= 50 && fiftyMoveToggle.isOn){
+        else if(halfMoveClock >= 50 && SettingsManager.main.fiftyMoveRuleEnabled){
             DrawGame();
         }
         else if(changeTeam && currentState == ChessGameState.GameCheck){

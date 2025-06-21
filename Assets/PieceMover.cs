@@ -5,7 +5,6 @@ using UnityEngine;
 public class PieceMover : MonoBehaviour
 {
     private Vector3 targetPosition;
-    public float moveTime = 1;
     private Vector3 vel;
     // Start is called before the first frame update
     void Start()
@@ -16,7 +15,7 @@ public class PieceMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref vel, moveTime);
+        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref vel, SettingsManager.main.animationTime);
     }
 
     
