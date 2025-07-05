@@ -12,15 +12,25 @@ public class SettingsManager : MonoBehaviour
     void Awake(){
         main = this;
     }
-    
+
+    private void Start()
+    {
+        setAnimationTime(1);
+    }
     public void setTextToSpeech(bool value){
         textToSpeechEnabled = value;
     }
     public void setFiftyMoveRule(bool value){
         fiftyMoveRuleEnabled = value;
     }
-    public void setAnimationTime(float value, int buttonIndex){
-        animationTime = value;
+    public void setAnimationTime(int buttonIndex){
+        switch(buttonIndex){
+            case 0: animationTime = 0f; break;
+            case 1: animationTime = 0.1f; break;
+            case 2: animationTime = 0.3f; break;
+            case 3: animationTime = 0.5f; break;
+            default: animationTime = -1; break;
+        }
         foreach(Button button in animationSpeedButtons){
             button.interactable = true;
         }
