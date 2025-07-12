@@ -21,5 +21,6 @@ public class PieceMover : MonoBehaviour
     
     public void SetTargetPosition(Vector3 newTarget){
         targetPosition = newTarget;
+        transform.position += Vector3.up * 0.1f; 
     }
 }
