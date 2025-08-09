@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ed5f269f862ac7374fd495d84e84354859652ad2"
+      "hash": "9b7ec744097b565b619c26683ada229e01ad7c54"
     },
     "com.huggingface.api": {
       "version": "https://github.com/huggingface/unity-api.git",
