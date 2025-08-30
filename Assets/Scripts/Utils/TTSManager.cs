@@ -1,12 +1,17 @@
+using SpeechLib;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SpeechLib;
 using UnityEngine.UI;
+using Voxell.Speech.TTS;
 
 public class TTSManager : MonoBehaviour
 {
     SpVoice voice = new SpVoice();
+    public TextToSpeech textToSpeech;
+
+    void OnDisable()
+      => textToSpeech.Dispose();
     void Start()
     {
         
@@ -38,7 +43,19 @@ public class TTSManager : MonoBehaviour
             } 
             speechString += MyUtils.getSquarePhonetic(move.destination);
         }
-        voice.Speak(speechString, SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
-        
+        ChooseSpeechPlatform(speechString);
+
+    }
+    public void ChooseSpeechPlatform(string speechString)
+    {
+        if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+        {
+            voice.Speak(speechString, SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFPurgeBeforeSpeak);
+        }
+        else
+        {
+            textToSpeech.Speak(speechString);
+        }
     }
 }
+
